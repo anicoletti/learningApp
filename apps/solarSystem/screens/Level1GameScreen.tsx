@@ -17,12 +17,26 @@ const gameOrbits = [
 
 const DraggablePlanet = ({ planet, onDrop, isPlaced }: any) => {
   const pan = useRef(new Animated.ValueXY()).current;
+  const [showName, setShowName] = useState(false);
   
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        pan.setOffset({ x: pan.x._value, y: pan.y._value });
+        pan.setValue({ x: 0, y: 0 });
+        setShowName(true);
+      },
       onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], { useNativeDriver: false }),
       onPanResponderRelease: (e, gesture) => {
+        pan.flattenOffset();
+        setShowName(false);
+        // If it was just a tap (didn't move much), just return.
+        if (Math.abs(gesture.dx) < 5 && Math.abs(gesture.dy) < 5) {
+           Animated.spring(pan, { toValue: { x: 0, y: 0 }, useNativeDriver: false }).start();
+           return;
+        }
+
         const dropSuccess = onDrop(planet.id, gesture.moveX, gesture.moveY);
         if (!dropSuccess) {
           Animated.spring(pan, { toValue: { x: 0, y: 0 }, useNativeDriver: false }).start();
@@ -40,6 +54,11 @@ const DraggablePlanet = ({ planet, onDrop, isPlaced }: any) => {
         style={styles.draggableImage} 
         resizeMode={planet.id === 'saturn' ? 'contain' : 'cover'} 
       />
+      {showName && (
+        <View style={styles.tooltip}>
+          <Text style={styles.tooltipText}>{planet.name}</Text>
+        </View>
+      )}
     </Animated.View>
   );
 };
@@ -63,11 +82,24 @@ export default function Level1GameScreen({ navigation }: any) {
 
     const distance = Math.sqrt(Math.pow(dropX - sunX, 2) + Math.pow(dropY - sunY, 2));
     
-    // Tolerance of +/- 45 pixels to the target radius
-    if (Math.abs(distance - targetOrbit.radius) < 45) {
+    // Find the closest orbit to the drop position
+    let nearestOrbit = gameOrbits[0];
+    let minDiff = Math.abs(distance - gameOrbits[0].radius);
+    
+    for (const orbit of gameOrbits) {
+      const diff = Math.abs(distance - orbit.radius);
+      if (diff < minDiff) {
+        minDiff = diff;
+        nearestOrbit = orbit;
+      }
+    }
+
+    // If the closest orbit is the correct one, and they are within a generous 60px tolerance
+    if (nearestOrbit.id === planetId && minDiff < 60) {
       setPlacedPlanets(prev => [...prev, planetId]);
       return true;
     }
+    
     return false;
   };
 
@@ -91,7 +123,7 @@ export default function Level1GameScreen({ navigation }: any) {
       <View style={StyleSheet.absoluteFill}>
         
         {/* Draw Orbits */}
-        {gameOrbits.map(orbit => (
+        {gameOrbits.map((orbit, index) => (
           <View 
             key={`ring-${orbit.id}`} 
             style={[styles.orbitRing, {
@@ -100,8 +132,12 @@ export default function Level1GameScreen({ navigation }: any) {
               borderRadius: orbit.radius,
               left: sunX - orbit.radius,
               top: sunY - orbit.radius,
+              alignItems: 'center',
+              justifyContent: 'flex-start'
             }]} 
-          />
+          >
+            <Text style={styles.orbitNumber}>{index + 1}</Text>
+          </View>
         ))}
 
         {/* Draw Sun */}
@@ -251,5 +287,28 @@ const styles = StyleSheet.create({
     width: 200,
     alignItems: 'center'
   },
-  successButtonText: { color: '#000', fontSize: 16, fontWeight: 'bold' }
+  successButtonText: { color: '#000', fontSize: 16, fontWeight: 'bold' },
+  orbitNumber: {
+    color: 'rgba(255,255,255,0.4)',
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginTop: 2,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    paddingHorizontal: 4,
+    borderRadius: 4,
+    overflow: 'hidden'
+  },
+  tooltip: {
+    position: 'absolute',
+    top: -30,
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  tooltipText: {
+    color: '#000',
+    fontSize: 14,
+    fontWeight: 'bold'
+  }
 });
