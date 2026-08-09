@@ -5,14 +5,14 @@ import { planets } from '../data/planets';
 const SPACE_BG = 'https://images.unsplash.com/photo-1464802686167-b939a6910659?q=80&w=3000&auto=format&fit=crop';
 
 const gameOrbits = [
-  { id: 'mercury', radius: 70, desktopAngle: Math.PI / 4, mobileAngle: Math.PI / 6, order: 1 },
-  { id: 'venus', radius: 110, desktopAngle: Math.PI * 1.2, mobileAngle: -Math.PI / 6, order: 2 },
-  { id: 'earth', radius: 150, desktopAngle: Math.PI * 1.7, mobileAngle: Math.PI / 8, order: 3 },
-  { id: 'mars', radius: 190, desktopAngle: Math.PI / 1.5, mobileAngle: -Math.PI / 8, order: 4 },
-  { id: 'jupiter', radius: 250, desktopAngle: Math.PI * 0.1, mobileAngle: Math.PI / 4, order: 5 },
-  { id: 'saturn', radius: 320, desktopAngle: Math.PI * 1.4, mobileAngle: -Math.PI / 4, order: 6 },
-  { id: 'uranus', radius: 390, desktopAngle: Math.PI * 0.8, mobileAngle: Math.PI / 3, order: 7 },
-  { id: 'neptune', radius: 460, desktopAngle: Math.PI * 1.9, mobileAngle: -Math.PI / 3, order: 8 },
+  { id: 'mercury', radius: 70, desktopAngle: Math.PI / 4, mobileAngle: Math.PI / 2.4, order: 1 },
+  { id: 'venus', radius: 110, desktopAngle: Math.PI * 1.2, mobileAngle: Math.PI / 1.7, order: 2 },
+  { id: 'earth', radius: 150, desktopAngle: Math.PI * 1.7, mobileAngle: Math.PI / 2.2, order: 3 },
+  { id: 'mars', radius: 190, desktopAngle: Math.PI / 1.5, mobileAngle: Math.PI / 1.8, order: 4 },
+  { id: 'jupiter', radius: 250, desktopAngle: Math.PI * 0.1, mobileAngle: Math.PI / 2.1, order: 5 },
+  { id: 'saturn', radius: 320, desktopAngle: Math.PI * 1.4, mobileAngle: Math.PI / 1.9, order: 6 },
+  { id: 'uranus', radius: 390, desktopAngle: Math.PI * 0.8, mobileAngle: Math.PI / 2.05, order: 7 },
+  { id: 'neptune', radius: 460, desktopAngle: Math.PI * 1.9, mobileAngle: Math.PI / 1.85, order: 8 },
 ];
 
 const DraggablePlanet = ({ planet, onDrop, isPlaced, onSelect, isSelected }: any) => {
@@ -78,12 +78,12 @@ export default function Level1GameScreen({ navigation }: any) {
   const [hideSuccessOverlay, setHideSuccessOverlay] = useState(false);
 
   const isMobile = width < 768;
-  const sunX = isMobile ? -30 : width / 2;
-  const sunY = isMobile ? height / 2 - 50 : height / 2;
-  const scale = isMobile ? Math.min(width / 440, 1) : Math.min(width / 1000, (height - 150) / 1000, 1);
+  const sunX = width / 2;
+  const sunY = isMobile ? 120 : height / 2;
+  const scale = isMobile ? Math.min(height / 850, 1) : Math.min(width / 1000, (height - 150) / 1000, 1);
 
   useEffect(() => {
-    const p = planets.filter(p => p.id !== 'sun');
+    const p = planets.filter(p => p.id !== 'sun' && p.id !== 'pluto');
     setShuffledPlanets(p.sort(() => 0.5 - Math.random()));
 
     if (Platform.OS === 'web') {
@@ -163,9 +163,9 @@ export default function Level1GameScreen({ navigation }: any) {
               borderRadius: orbit.radius,
               left: sunX - orbit.radius,
               top: sunY - orbit.radius,
-              alignItems: isMobile ? 'flex-end' : 'center',
-              justifyContent: isMobile ? 'center' : 'flex-start',
-              paddingRight: isMobile ? 5 : 0
+              alignItems: 'center',
+              justifyContent: isMobile ? 'flex-end' : 'flex-start',
+              paddingBottom: isMobile ? 5 : 0
             }]} 
           >
             <Text style={styles.orbitNumber}>{orbit.order}</Text>

@@ -39,7 +39,8 @@ export default function Level1Screen({ navigation }: any) {
     
     let closestPlanet = planets[0];
     let minDiff = Infinity;
-    for (const p of planets) {
+    const orbitalPlanets = planets.filter(p => p.id !== 'pluto');
+    for (const p of orbitalPlanets) {
       const diff = Math.abs(p.orbitRadius - viewCenter);
       if (diff < minDiff) {
         minDiff = diff;
@@ -108,7 +109,7 @@ export default function Level1Screen({ navigation }: any) {
           <View style={styles.mapCenter}>
             
             {/* Orbit Arcs */}
-            {planets.filter(p => p.id !== 'sun').map(planet => (
+            {planets.filter(p => p.id !== 'sun' && p.id !== 'pluto').map(planet => (
               <View key={`orbit-${planet.id}`} style={[styles.orbitArc, {
                 top: -planet.orbitRadius,
                 left: -planet.orbitRadius,
@@ -128,7 +129,7 @@ export default function Level1Screen({ navigation }: any) {
             </TouchableOpacity>
 
             {/* Planets */}
-            {planets.filter(p => p.id !== 'sun').map((planet, index) => (
+            {planets.filter(p => p.id !== 'sun' && p.id !== 'pluto').map((planet, index) => (
               <View key={planet.id} style={[styles.planetWrapper, { 
                 left: planet.orbitRadius, 
                 top: -planet.radius 
@@ -208,7 +209,7 @@ export default function Level1Screen({ navigation }: any) {
       <View style={styles.indicatorContainer}>
         <Text style={styles.indicatorText}>ORBITAL MAP</Text>
         <View style={styles.indicatorTrack}>
-          {planets.map(planet => {
+          {planets.filter(p => p.id !== 'pluto').map(planet => {
             const isActive = planet.id === activePlanetId;
             return (
               <TouchableOpacity 
