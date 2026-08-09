@@ -13,7 +13,7 @@ export const planets = [
   },
   { 
     id: 'venus', name: 'Venus', color: '#FFD54F', type: 'Planet', radius: 34, orbitRadius: 450, 
-    info: 'The hottest planet in the solar system, with a toxic atmosphere that traps heat.',
+    info: 'The hottest planet in the solar system. It rotates so slowly that a day on Venus is actually longer than its year!',
     funFact: 'Venus spins backwards, meaning the Sun rises in the west and sets in the east.',
     imageSource: require('../assets/planets/venus.png')
   },
