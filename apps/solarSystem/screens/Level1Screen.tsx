@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Modal, Image, useWindowDimensions, Platform } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Modal, Image, useWindowDimensions, Platform, Animated } from 'react-native';
 import { planets } from '../data/planets';
 
 const SPACE_BG = 'https://images.unsplash.com/photo-1464802686167-b939a6910659?q=80&w=3000&auto=format&fit=crop'; // Milky Way band without foreground
@@ -8,6 +8,7 @@ export default function Level1Screen({ navigation }: any) {
   const [selectedPlanet, setSelectedPlanet] = useState<any>(null);
   const [activePlanetId, setActivePlanetId] = useState<string>('sun');
   const scrollViewRef = useRef<ScrollView>(null);
+  const scrollX = useRef(new Animated.Value(0)).current;
   const { width: screenWidth } = useWindowDimensions();
 
   const scrollToPlanet = (orbitRadius: number) => {
@@ -34,8 +35,22 @@ export default function Level1Screen({ navigation }: any) {
     }
   };
 
+  const translateX = scrollX.interpolate({
+    inputRange: [0, 4000],
+    outputRange: [0, -500],
+    extrapolate: 'clamp',
+  });
+
   return (
-    <ImageBackground source={{ uri: SPACE_BG }} style={styles.container}>
+    <View style={styles.container}>
+      <Animated.Image 
+        source={{ uri: SPACE_BG }} 
+        style={[
+          StyleSheet.absoluteFillObject, 
+          { width: screenWidth + 500, transform: [{ translateX }] }
+        ]}
+        resizeMode="cover"
+      />
       <View style={styles.darkOverlay} />
       
       <View style={styles.header}>
@@ -43,11 +58,14 @@ export default function Level1Screen({ navigation }: any) {
         <Text style={styles.subtitle}>Scroll right to explore. Tap a planet to learn more!</Text>
       </View>
 
-      <ScrollView 
-        ref={scrollViewRef} 
+      <Animated.ScrollView 
+        ref={scrollViewRef as any} 
         horizontal 
         showsHorizontalScrollIndicator={false}
-        onScroll={handleScroll}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          { useNativeDriver: true, listener: handleScroll }
+        )}
         scrollEventThrottle={16}
       >
         <View style={styles.scrollContent}>
@@ -111,7 +129,7 @@ export default function Level1Screen({ navigation }: any) {
             
           </View>
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
 
       {/* Info Modal */}
       <Modal visible={!!selectedPlanet} transparent={true} animationType="fade">
@@ -170,7 +188,7 @@ export default function Level1Screen({ navigation }: any) {
           })}
         </View>
       </View>
-    </ImageBackground>
+    </View>
   );
 }
 
