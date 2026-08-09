@@ -43,7 +43,7 @@ export default function Level1Screen({ navigation }: any) {
     const visibleEnd = scrollXVal + screenWidth;
     
     const visibleIds = planets.filter(p => {
-       const pX = 250 + p.orbitRadius;
+       const pX = (screenWidth / 2) + p.orbitRadius;
        return pX > visibleStart - 150 && pX < visibleEnd + 150;
     }).map(p => p.id);
     
