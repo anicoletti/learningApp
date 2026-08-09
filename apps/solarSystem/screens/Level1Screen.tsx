@@ -42,6 +42,9 @@ export default function Level1Screen({ navigation }: any) {
     const { width: currentWidth, height: currentHeight } = event.nativeEvent.layoutMeasurement || { width: screenWidth, height: 800 };
     const currentScale = currentWidth < 768 ? 1 : Math.max(1, (currentHeight - 200) / 800);
 
+    const visibleStart = scrollXVal;
+    const visibleEnd = scrollXVal + currentWidth;
+
     const visibleIds = planets.filter(p => {
        const pX = (currentWidth < 768 ? 100 : 250) + p.orbitRadius * currentScale;
        return pX > visibleStart - 150 && pX < visibleEnd + 150;
