@@ -1,0 +1,17 @@
+{
+  "devDependencies": {
+    "turbo": "^2.0.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "lint": "turbo run lint",
+    "dev": "turbo run dev",
+    "build": "turbo run build"
+  },
+  "name": "learning-apps-monorepo"
+}
