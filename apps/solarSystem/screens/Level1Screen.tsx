@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
   },
   indicatorContainer: {
     position: 'absolute',
-    bottom: 15,
+    bottom: 35,
     left: 0,
     right: 0,
     alignItems: 'center',
