@@ -56,12 +56,20 @@ export default function Level1Screen({ navigation }: any) {
       <View style={styles.header}>
         <View style={styles.headerRow}>
           <Text style={styles.title}>LEVEL 1: MEET THE NEIGHBORS</Text>
-          <TouchableOpacity 
-            style={styles.quizButton}
-            onPress={() => navigation.navigate('Quiz')}
-          >
-            <Text style={styles.quizButtonText}>Take a Quiz!</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity 
+              style={[styles.quizButton, styles.gameButton]}
+              onPress={() => navigation.navigate('Level1Game')}
+            >
+              <Text style={styles.quizButtonText}>Play Game!</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.quizButton}
+              onPress={() => navigation.navigate('Quiz')}
+            >
+              <Text style={styles.quizButtonText}>Take a Quiz!</Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <Text style={styles.subtitle}>Scroll right to explore. Tap a planet to learn more!</Text>
       </View>
@@ -226,12 +234,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     flex: 1,
   },
+  buttonGroup: {
+    flexDirection: 'row',
+  },
   quizButton: {
     backgroundColor: '#8b5cf6',
     paddingHorizontal: 15,
     paddingVertical: 8,
     borderRadius: 20,
     marginLeft: 10,
+  },
+  gameButton: {
+    backgroundColor: '#ec4899', // Pinkish color for distinction
   },
   quizButtonText: {
     color: '#fff',
