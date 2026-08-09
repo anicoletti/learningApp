@@ -43,7 +43,7 @@ export default function Level1Screen({ navigation }: any) {
     const visibleEnd = scrollXVal + screenWidth;
     
     const visibleIds = planets.filter(p => {
-       const pX = (screenWidth / 2) + p.orbitRadius;
+       const pX = (screenWidth < 768 ? 100 : 250) + p.orbitRadius;
        return pX > visibleStart - 150 && pX < visibleEnd + 150;
     }).map(p => p.id);
     
@@ -118,10 +118,10 @@ export default function Level1Screen({ navigation }: any) {
         )}
         scrollEventThrottle={16}
         // @ts-ignore
-        style={{ flex: 1, touchAction: 'none' }}
-        contentContainerStyle={[styles.scrollContent, { paddingLeft: screenWidth / 2 }]}
+        style={{ touchAction: 'none' }}
       >
-        <View style={styles.mapCenter}>
+        <View style={[styles.scrollContent, { paddingLeft: isMobile ? 100 : 250 }]}>
+          <View style={[styles.mapCenter, isMobile && { marginTop: -150 }]}>
             
             {/* Orbit Arcs */}
             {planets.filter(p => p.id !== 'sun').map(planet => (
@@ -180,6 +180,7 @@ export default function Level1Screen({ navigation }: any) {
             ))}
             
           </View>
+        </View>
       </Animated.ScrollView>
 
       {/* Info Modal */}
@@ -316,7 +317,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     width: 3600,
-    flexGrow: 1,
     justifyContent: 'center',
   },
   mapCenter: {
