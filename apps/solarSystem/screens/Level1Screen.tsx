@@ -42,17 +42,16 @@ export default function Level1Screen({ navigation }: any) {
     const visibleStart = scrollXVal;
     const visibleEnd = scrollXVal + screenWidth;
     
-    const orbitalPlanets = planets.filter(p => p.id !== 'pluto');
-    const visibleIds = orbitalPlanets.filter(p => {
+    const visibleIds = planets.filter(p => {
        const pX = 250 + p.orbitRadius;
        return pX > visibleStart - 150 && pX < visibleEnd + 150;
     }).map(p => p.id);
     
     if (visibleIds.length === 0) {
-      let closestPlanet = orbitalPlanets[0];
+      let closestPlanet = planets[0];
       let minDiff = Infinity;
       const viewCenter = scrollXVal + screenWidth / 2 - 100;
-      for (const p of orbitalPlanets) {
+      for (const p of planets) {
         const diff = Math.abs(p.orbitRadius - viewCenter);
         if (diff < minDiff) {
           minDiff = diff;
@@ -71,6 +70,8 @@ export default function Level1Screen({ navigation }: any) {
     extrapolate: 'clamp',
   });
 
+  const isMobile = screenWidth < 768;
+
   return (
     <View style={styles.container}>
       <Animated.Image 
@@ -86,20 +87,22 @@ export default function Level1Screen({ navigation }: any) {
       <View style={styles.header}>
         <View style={styles.headerRow}>
           <Text style={styles.title}>LEVEL 1: MEET THE NEIGHBORS</Text>
-          <View style={styles.buttonGroup}>
-            <TouchableOpacity 
-              style={[styles.quizButton, styles.gameButton]}
-              onPress={() => navigation.navigate('Level1Game')}
-            >
-              <Text style={styles.quizButtonText}>Play Game!</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={styles.quizButton}
-              onPress={() => navigation.navigate('Quiz')}
-            >
-              <Text style={styles.quizButtonText}>Take a Quiz!</Text>
-            </TouchableOpacity>
-          </View>
+          {!isMobile && (
+            <View style={styles.buttonGroup}>
+              <TouchableOpacity 
+                style={[styles.quizButton, styles.gameButton]}
+                onPress={() => navigation.navigate('Level1Game')}
+              >
+                <Text style={styles.quizButtonText}>Play Game!</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.quizButton}
+                onPress={() => navigation.navigate('Quiz')}
+              >
+                <Text style={styles.quizButtonText}>Take a Quiz!</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
         <Text style={styles.subtitle}>Scroll right to explore. Tap a planet to learn more!</Text>
       </View>
@@ -121,7 +124,7 @@ export default function Level1Screen({ navigation }: any) {
           <View style={styles.mapCenter}>
             
             {/* Orbit Arcs */}
-            {planets.filter(p => p.id !== 'sun' && p.id !== 'pluto').map(planet => (
+            {planets.filter(p => p.id !== 'sun').map(planet => (
               <View key={`orbit-${planet.id}`} style={[styles.orbitArc, {
                 top: -planet.orbitRadius,
                 left: -planet.orbitRadius,
@@ -141,7 +144,7 @@ export default function Level1Screen({ navigation }: any) {
             </TouchableOpacity>
 
             {/* Planets */}
-            {planets.filter(p => p.id !== 'sun' && p.id !== 'pluto').map((planet, index) => (
+            {planets.filter(p => p.id !== 'sun').map((planet, index) => (
               <View key={planet.id} style={[styles.planetWrapper, { 
                 left: planet.orbitRadius, 
                 top: -planet.radius 
@@ -221,7 +224,7 @@ export default function Level1Screen({ navigation }: any) {
       <View style={styles.indicatorContainer}>
         <Text style={styles.indicatorText}>ORBITAL MAP</Text>
         <View style={styles.indicatorTrack}>
-          {planets.filter(p => p.id !== 'pluto').map((planet, index, arr) => {
+          {planets.map((planet, index, arr) => {
             const isActive = visiblePlanetIds.includes(planet.id);
             const isFirstActive = isActive && !visiblePlanetIds.includes(arr[index - 1]?.id);
             const isLastActive = isActive && !visiblePlanetIds.includes(arr[index + 1]?.id);
@@ -242,6 +245,22 @@ export default function Level1Screen({ navigation }: any) {
             );
           })}
         </View>
+        {isMobile && (
+          <View style={[styles.buttonGroup, { marginTop: 15, justifyContent: 'center' }]}>
+            <TouchableOpacity 
+              style={[styles.quizButton, styles.gameButton, { marginLeft: 0, marginRight: 10 }]}
+              onPress={() => navigation.navigate('Level1Game')}
+            >
+              <Text style={styles.quizButtonText}>Play Game!</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.quizButton}
+              onPress={() => navigation.navigate('Quiz')}
+            >
+              <Text style={styles.quizButtonText}>Take a Quiz!</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -427,7 +446,7 @@ const styles = StyleSheet.create({
   },
   indicatorContainer: {
     position: 'absolute',
-    bottom: 30,
+    bottom: 15,
     left: 0,
     right: 0,
     alignItems: 'center',

@@ -5,14 +5,14 @@ import { planets } from '../data/planets';
 const SPACE_BG = 'https://images.unsplash.com/photo-1464802686167-b939a6910659?q=80&w=3000&auto=format&fit=crop';
 
 const gameOrbits = [
-  { id: 'mercury', radius: 70, desktopAngle: Math.PI / 4, mobileAngle: Math.PI / 2.4, order: 1 },
-  { id: 'venus', radius: 110, desktopAngle: Math.PI * 1.2, mobileAngle: Math.PI / 1.7, order: 2 },
-  { id: 'earth', radius: 150, desktopAngle: Math.PI * 1.7, mobileAngle: Math.PI / 2.2, order: 3 },
-  { id: 'mars', radius: 190, desktopAngle: Math.PI / 1.5, mobileAngle: Math.PI / 1.8, order: 4 },
-  { id: 'jupiter', radius: 250, desktopAngle: Math.PI * 0.1, mobileAngle: Math.PI / 2.1, order: 5 },
-  { id: 'saturn', radius: 320, desktopAngle: Math.PI * 1.4, mobileAngle: Math.PI / 1.9, order: 6 },
-  { id: 'uranus', radius: 390, desktopAngle: Math.PI * 0.8, mobileAngle: Math.PI / 2.05, order: 7 },
-  { id: 'neptune', radius: 460, desktopAngle: Math.PI * 1.9, mobileAngle: Math.PI / 1.85, order: 8 },
+  { id: 'mercury', radius: 70, desktopAngle: Math.PI / 4, mobileAngle: Math.PI / 3.0, order: 1 },
+  { id: 'venus', radius: 110, desktopAngle: Math.PI * 1.2, mobileAngle: Math.PI / 1.5, order: 2 },
+  { id: 'earth', radius: 150, desktopAngle: Math.PI * 1.7, mobileAngle: Math.PI / 2.6, order: 3 },
+  { id: 'mars', radius: 190, desktopAngle: Math.PI / 1.5, mobileAngle: Math.PI / 1.6, order: 4 },
+  { id: 'jupiter', radius: 250, desktopAngle: Math.PI * 0.1, mobileAngle: Math.PI / 2.4, order: 5 },
+  { id: 'saturn', radius: 320, desktopAngle: Math.PI * 1.4, mobileAngle: Math.PI / 1.7, order: 6 },
+  { id: 'uranus', radius: 390, desktopAngle: Math.PI * 0.8, mobileAngle: Math.PI / 2.2, order: 7 },
+  { id: 'neptune', radius: 460, desktopAngle: Math.PI * 1.9, mobileAngle: Math.PI / 1.8, order: 8 },
 ];
 
 const DraggablePlanet = ({ planet, onDrop, isPlaced, onSelect, isSelected }: any) => {
@@ -146,7 +146,7 @@ export default function Level1GameScreen({ navigation }: any) {
       </TouchableOpacity>
 
       <Text style={styles.headerTitle}>Level 1: Orbit Assembly</Text>
-      <Text style={styles.headerSubtitle}>Drag and drop the planets into their correct orbits!</Text>
+      <Text style={styles.headerSubtitle}>Tap to select a planet, then tap its proper orbit to place it!</Text>
 
       {/* Map Area */}
       <View style={[StyleSheet.absoluteFill, { transform: [{ scale }] }]}>
@@ -196,6 +196,9 @@ export default function Level1GameScreen({ navigation }: any) {
               }]}
             >
               <Image source={planet.imageSource} style={{ width: '100%', height: '100%' }} resizeMode={id === 'saturn' ? 'contain' : 'cover'} />
+              <Text style={{ position: 'absolute', top: pSize, color: '#fff', fontSize: 10, marginTop: 2, fontWeight: 'bold', backgroundColor: 'rgba(0,0,0,0.6)', paddingHorizontal: 4, borderRadius: 4, width: 70, textAlign: 'center', left: pSize/2 - 35 }}>
+                {planet.name}
+              </Text>
             </View>
           );
         })}
