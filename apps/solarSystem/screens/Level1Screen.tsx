@@ -118,10 +118,10 @@ export default function Level1Screen({ navigation }: any) {
         )}
         scrollEventThrottle={16}
         // @ts-ignore
-        style={{ touchAction: 'none' }}
+        style={{ flex: 1, touchAction: 'none' }}
+        contentContainerStyle={[styles.scrollContent, { paddingLeft: screenWidth / 2 }]}
       >
-        <View style={styles.scrollContent}>
-          <View style={styles.mapCenter}>
+        <View style={styles.mapCenter}>
             
             {/* Orbit Arcs */}
             {planets.filter(p => p.id !== 'sun').map(planet => (
@@ -317,8 +317,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     width: 3600,
+    flexGrow: 1,
     justifyContent: 'center',
-    paddingLeft: 250, 
   },
   mapCenter: {
     height: 0,
