@@ -180,7 +180,6 @@ export default function Level1Screen({ navigation }: any) {
             ))}
             
           </View>
-        </View>
       </Animated.ScrollView>
 
       {/* Info Modal */}
