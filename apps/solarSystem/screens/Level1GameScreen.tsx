@@ -5,14 +5,14 @@ import { planets } from '../data/planets';
 const SPACE_BG = 'https://images.unsplash.com/photo-1464802686167-b939a6910659?q=80&w=3000&auto=format&fit=crop';
 
 const gameOrbits = [
-  { id: 'mercury', radius: 70, desktopAngle: Math.PI / 4, mobileAngle: 0, order: 1 },
-  { id: 'venus', radius: 110, desktopAngle: Math.PI * 1.2, mobileAngle: Math.PI / 8, order: 2 },
-  { id: 'earth', radius: 150, desktopAngle: Math.PI * 1.7, mobileAngle: -Math.PI / 8, order: 3 },
-  { id: 'mars', radius: 190, desktopAngle: Math.PI / 1.5, mobileAngle: Math.PI / 4, order: 4 },
-  { id: 'jupiter', radius: 250, desktopAngle: Math.PI * 0.1, mobileAngle: -Math.PI / 4, order: 5 },
-  { id: 'saturn', radius: 320, desktopAngle: Math.PI * 1.4, mobileAngle: Math.PI / 3, order: 6 },
-  { id: 'uranus', radius: 390, desktopAngle: Math.PI * 0.8, mobileAngle: -Math.PI / 3, order: 7 },
-  { id: 'neptune', radius: 460, desktopAngle: Math.PI * 1.9, mobileAngle: Math.PI / 2.5, order: 8 },
+  { id: 'mercury', radius: 70, desktopAngle: Math.PI / 4, mobileAngle: Math.PI / 6, order: 1 },
+  { id: 'venus', radius: 110, desktopAngle: Math.PI * 1.2, mobileAngle: -Math.PI / 6, order: 2 },
+  { id: 'earth', radius: 150, desktopAngle: Math.PI * 1.7, mobileAngle: Math.PI / 8, order: 3 },
+  { id: 'mars', radius: 190, desktopAngle: Math.PI / 1.5, mobileAngle: -Math.PI / 8, order: 4 },
+  { id: 'jupiter', radius: 250, desktopAngle: Math.PI * 0.1, mobileAngle: Math.PI / 4, order: 5 },
+  { id: 'saturn', radius: 320, desktopAngle: Math.PI * 1.4, mobileAngle: -Math.PI / 4, order: 6 },
+  { id: 'uranus', radius: 390, desktopAngle: Math.PI * 0.8, mobileAngle: Math.PI / 3, order: 7 },
+  { id: 'neptune', radius: 460, desktopAngle: Math.PI * 1.9, mobileAngle: -Math.PI / 3, order: 8 },
 ];
 
 const DraggablePlanet = ({ planet, onDrop, isPlaced, onSelect, isSelected }: any) => {
@@ -75,6 +75,7 @@ export default function Level1GameScreen({ navigation }: any) {
   const [placedPlanets, setPlacedPlanets] = useState<string[]>([]);
   const [shuffledPlanets, setShuffledPlanets] = useState<any[]>([]);
   const [selectedPlanetId, setSelectedPlanetId] = useState<string | null>(null);
+  const [hideSuccessOverlay, setHideSuccessOverlay] = useState(false);
 
   const isMobile = width < 768;
   const sunX = isMobile ? -30 : width / 2;
@@ -162,8 +163,9 @@ export default function Level1GameScreen({ navigation }: any) {
               borderRadius: orbit.radius,
               left: sunX - orbit.radius,
               top: sunY - orbit.radius,
-              alignItems: 'center',
-              justifyContent: 'flex-start'
+              alignItems: isMobile ? 'flex-end' : 'center',
+              justifyContent: isMobile ? 'center' : 'flex-start',
+              paddingRight: isMobile ? 5 : 0
             }]} 
           >
             <Text style={styles.orbitNumber}>{orbit.order}</Text>
@@ -215,25 +217,35 @@ export default function Level1GameScreen({ navigation }: any) {
       </View>
 
       {/* Success Modal */}
-      {isComplete && (
+      {isComplete && !hideSuccessOverlay && (
         <View style={styles.successOverlay}>
           <View style={styles.successCard}>
             <Text style={styles.successTitle}>System Assembled!</Text>
             <Text style={styles.successText}>You successfully put all the planets in order.</Text>
+            
             <TouchableOpacity 
               style={styles.successButton} 
               onPress={() => {
                 setPlacedPlanets([]);
                 setShuffledPlanets([...shuffledPlanets].sort(() => 0.5 - Math.random()));
+                setHideSuccessOverlay(false);
               }}
             >
               <Text style={styles.successButtonText}>Play Again</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.successButton, { backgroundColor: 'transparent', borderWidth: 2, borderColor: '#4FC3F7' }]} 
+              onPress={() => setHideSuccessOverlay(true)}
+            >
+              <Text style={[styles.successButtonText, { color: '#4FC3F7' }]}>View Map</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity 
               style={[styles.successButton, { backgroundColor: 'transparent', borderWidth: 2, borderColor: '#4ade80' }]} 
               onPress={() => navigation.navigate('Level1')}
             >
-              <Text style={[styles.successButtonText, { color: '#4ade80' }]}>Back to Map</Text>
+              <Text style={[styles.successButtonText, { color: '#4ade80' }]}>Back to Selection</Text>
             </TouchableOpacity>
           </View>
         </View>

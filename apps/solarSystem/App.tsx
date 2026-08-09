@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import HomeScreen from './screens/HomeScreen';
@@ -8,6 +8,17 @@ import PlanetDetailScreen from './screens/PlanetDetailScreen';
 import Level1Screen from './screens/Level1Screen';
 import QuizScreen from './screens/QuizScreen';
 import Level1GameScreen from './screens/Level1GameScreen';
+
+if (Platform.OS === 'web' && typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = `
+    ::-webkit-scrollbar { height: 10px; width: 10px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); border-radius: 5px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 5px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.5); }
+  `;
+  document.head.append(style);
+}
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('Home');
