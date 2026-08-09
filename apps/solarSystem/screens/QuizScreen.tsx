@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Animated } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { quizQuestions } from '../data/quizData';
 
 const SPACE_BG = 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=3000&auto=format&fit=crop';
@@ -7,10 +7,27 @@ const SPACE_BG = 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q
 export default function QuizScreen({ navigation }: any) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [activeQuestions, setActiveQuestions] = useState<any[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   
-  const question = quizQuestions[currentQuestionIndex];
+  const startQuiz = () => {
+    // Shuffle the full bank and slice 5
+    const shuffled = [...quizQuestions].sort(() => 0.5 - Math.random());
+    setActiveQuestions(shuffled.slice(0, 5));
+    setCurrentQuestionIndex(0);
+    setScore(0);
+    setShowResults(false);
+    setSelectedAnswer(null);
+  };
+
+  useEffect(() => {
+    startQuiz();
+  }, []);
+
+  const question = activeQuestions[currentQuestionIndex];
+
+  if (!question) return null;
 
   const handleAnswer = (answer: string) => {
     if (selectedAnswer) return; // Prevent multiple taps
@@ -23,7 +40,7 @@ export default function QuizScreen({ navigation }: any) {
     }
     
     setTimeout(() => {
-      if (currentQuestionIndex < quizQuestions.length - 1) {
+      if (currentQuestionIndex < activeQuestions.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setSelectedAnswer(null);
       } else {
@@ -33,21 +50,25 @@ export default function QuizScreen({ navigation }: any) {
   };
 
   const restartQuiz = () => {
-    setCurrentQuestionIndex(0);
-    setScore(0);
-    setShowResults(false);
-    setSelectedAnswer(null);
+    startQuiz();
   };
 
   return (
     <ImageBackground source={{ uri: SPACE_BG }} style={styles.container}>
       <View style={styles.darkOverlay} />
+
+      <TouchableOpacity 
+        style={styles.closeHeaderButton} 
+        onPress={() => navigation.navigate('Level1')}
+      >
+        <Text style={styles.closeHeaderButtonText}>✕</Text>
+      </TouchableOpacity>
       
       <View style={styles.content}>
         {showResults ? (
           <View style={styles.card}>
             <Text style={styles.title}>Quiz Complete!</Text>
-            <Text style={styles.scoreText}>You scored {score} out of {quizQuestions.length}</Text>
+            <Text style={styles.scoreText}>You scored {score} out of {activeQuestions.length}</Text>
             
             <TouchableOpacity style={styles.actionButton} onPress={restartQuiz}>
               <Text style={styles.actionButtonText}>Try Again</Text>
@@ -58,7 +79,7 @@ export default function QuizScreen({ navigation }: any) {
           </View>
         ) : (
           <View style={styles.card}>
-            <Text style={styles.progressText}>Question {currentQuestionIndex + 1} of {quizQuestions.length}</Text>
+            <Text style={styles.progressText}>Question {currentQuestionIndex + 1} of {activeQuestions.length}</Text>
             <Text style={styles.questionText}>{question.question}</Text>
             
             <View style={styles.optionsContainer}>
@@ -103,6 +124,23 @@ const styles = StyleSheet.create({
   darkOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  closeHeaderButton: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
+  },
+  closeHeaderButtonText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   content: {
     flex: 1,
