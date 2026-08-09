@@ -31,6 +31,23 @@ learningApps/
 └── turbo.json           # Turborepo pipeline configuration
 ```
 
+## Local Development Prerequisites
+
+Depending on which platform you intend to run locally, you will need to ensure your environment is set up properly:
+
+### 1. Web
+Web support is built-in, but requires standard web dependencies (`react-dom` and `react-native-web`).
+
+### 2. Android
+To run the app locally on an Android emulator, you MUST install **Android Studio** and the **Android SDK**. 
+- Download Android Studio and ensure the Android SDK is installed.
+- Ensure `adb` is available in your system PATH (or that `ANDROID_HOME` is set).
+- *Alternative:* You can use the **Expo Go** app on your physical Android device to scan the QR code without needing the SDK installed on your PC! Just run `npx expo start`.
+
+### 3. iOS
+To run the app locally on an iOS simulator, you MUST be on a Mac and have **Xcode** installed.
+- *Alternative:* Like Android, you can use the **Expo Go** app on your physical iPhone.
+
 ## Getting Started
 
 1. Clone the repository: `git clone https://github.com/anicoletti/learningApp.git`
