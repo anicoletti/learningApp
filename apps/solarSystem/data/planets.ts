@@ -46,6 +46,7 @@ export const planets = [
   },
   { 
     id: 'pluto', name: 'Pluto', color: '#E0E0E0', type: 'Dwarf Planet', radius: 15, orbitRadius: 3300, 
-    info: 'A beloved dwarf planet in the Kuiper belt. Gotta represent Pluto!'
+    info: 'A beloved dwarf planet in the Kuiper belt. Gotta represent Pluto!',
+    imageSource: require('../assets/planets/pluto.png')
   },
 ];
