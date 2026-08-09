@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Modal, Image, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Modal, Image, useWindowDimensions, Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { planets } from '../data/planets';
 
@@ -158,11 +158,19 @@ export default function Level1Screen({ navigation }: any) {
                   </>
                 ) : (
                   <View style={styles.webViewContainer}>
-                    <WebView 
-                      source={{ uri: selectedPlanet.url3D }} 
-                      style={styles.webView} 
-                      scrollEnabled={false}
-                    />
+                    {Platform.OS === 'web' ? (
+                      <iframe 
+                        src={selectedPlanet.url3D} 
+                        style={{ width: '100%', height: '100%', border: 'none', borderRadius: 15 }} 
+                        title="3D Viewer"
+                      />
+                    ) : (
+                      <WebView 
+                        source={{ uri: selectedPlanet.url3D }} 
+                        style={styles.webView} 
+                        scrollEnabled={false}
+                      />
+                    )}
                     <TouchableOpacity 
                       style={[styles.closeButton, styles.close3DButton]} 
                       onPress={() => setShow3D(false)}
