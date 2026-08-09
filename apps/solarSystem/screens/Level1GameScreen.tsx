@@ -5,17 +5,17 @@ import { planets } from '../data/planets';
 const SPACE_BG = 'https://images.unsplash.com/photo-1464802686167-b939a6910659?q=80&w=3000&auto=format&fit=crop';
 
 const gameOrbits = [
-  { id: 'mercury', radius: 70, angle: Math.PI / 4 },
-  { id: 'venus', radius: 110, angle: Math.PI * 1.2 },
-  { id: 'earth', radius: 150, angle: Math.PI * 1.7 },
-  { id: 'mars', radius: 190, angle: Math.PI / 1.5 },
-  { id: 'jupiter', radius: 250, angle: Math.PI * 0.1 },
-  { id: 'saturn', radius: 320, angle: Math.PI * 1.4 },
-  { id: 'uranus', radius: 390, angle: Math.PI * 0.8 },
-  { id: 'neptune', radius: 460, angle: Math.PI * 1.9 },
+  { id: 'mercury', radius: 70, angle: Math.PI / 4, order: 1 },
+  { id: 'venus', radius: 110, angle: Math.PI * 1.2, order: 2 },
+  { id: 'earth', radius: 150, angle: Math.PI * 1.7, order: 3 },
+  { id: 'mars', radius: 190, angle: Math.PI / 1.5, order: 4 },
+  { id: 'jupiter', radius: 250, angle: Math.PI * 0.1, order: 5 },
+  { id: 'saturn', radius: 320, angle: Math.PI * 1.4, order: 6 },
+  { id: 'uranus', radius: 390, angle: Math.PI * 0.8, order: 7 },
+  { id: 'neptune', radius: 460, angle: Math.PI * 1.9, order: 8 },
 ];
 
-const DraggablePlanet = ({ planet, onDrop, isPlaced }: any) => {
+const DraggablePlanet = ({ planet, onDrop, isPlaced, onSelect, isSelected }: any) => {
   const pan = useRef(new Animated.ValueXY()).current;
   const [showName, setShowName] = useState(false);
   
@@ -31,9 +31,11 @@ const DraggablePlanet = ({ planet, onDrop, isPlaced }: any) => {
       onPanResponderRelease: (e, gesture) => {
         pan.flattenOffset();
         setShowName(false);
-        // If it was just a tap (didn't move much), just return.
+        
+        // If it was just a tap (didn't move much), trigger selection instead of drop
         if (Math.abs(gesture.dx) < 5 && Math.abs(gesture.dy) < 5) {
            Animated.spring(pan, { toValue: { x: 0, y: 0 }, useNativeDriver: false }).start();
+           onSelect(planet.id);
            return;
         }
 
@@ -48,7 +50,7 @@ const DraggablePlanet = ({ planet, onDrop, isPlaced }: any) => {
   if (isPlaced) return null;
 
   return (
-    <Animated.View {...panResponder.panHandlers} style={[pan.getLayout(), styles.draggableItem]}>
+    <Animated.View {...panResponder.panHandlers} style={[pan.getLayout(), styles.draggableItem, isSelected && styles.selectedItem]}>
       <Image 
         source={planet.imageSource} 
         style={styles.draggableImage} 
@@ -67,6 +69,7 @@ export default function Level1GameScreen({ navigation }: any) {
   const { width, height } = useWindowDimensions();
   const [placedPlanets, setPlacedPlanets] = useState<string[]>([]);
   const [shuffledPlanets, setShuffledPlanets] = useState<any[]>([]);
+  const [selectedPlanetId, setSelectedPlanetId] = useState<string | null>(null);
 
   const sunX = width / 2;
   const sunY = height / 2;
@@ -75,6 +78,15 @@ export default function Level1GameScreen({ navigation }: any) {
     const p = planets.filter(p => p.id !== 'sun');
     setShuffledPlanets(p.sort(() => 0.5 - Math.random()));
   }, []);
+
+  const handleOrbitTap = (orbitId: string) => {
+    if (!selectedPlanetId) return;
+    if (orbitId === selectedPlanetId) {
+      setPlacedPlanets(prev => [...prev, selectedPlanetId]);
+    }
+    // Always clear selection after an orbit is tapped
+    setSelectedPlanetId(null);
+  };
 
   const handleDrop = (planetId: string, dropX: number, dropY: number) => {
     const targetOrbit = gameOrbits.find(o => o.id === planetId);
@@ -122,10 +134,12 @@ export default function Level1GameScreen({ navigation }: any) {
       {/* Map Area */}
       <View style={StyleSheet.absoluteFill}>
         
-        {/* Draw Orbits */}
-        {gameOrbits.map((orbit, index) => (
-          <View 
+        {/* Draw Orbits (Render largest first so smaller ones can be tapped inside them) */}
+        {[...gameOrbits].sort((a, b) => b.radius - a.radius).map((orbit) => (
+          <TouchableOpacity 
             key={`ring-${orbit.id}`} 
+            activeOpacity={1}
+            onPress={() => handleOrbitTap(orbit.id)}
             style={[styles.orbitRing, {
               width: orbit.radius * 2,
               height: orbit.radius * 2,
@@ -136,8 +150,8 @@ export default function Level1GameScreen({ navigation }: any) {
               justifyContent: 'flex-start'
             }]} 
           >
-            <Text style={styles.orbitNumber}>{index + 1}</Text>
-          </View>
+            <Text style={styles.orbitNumber}>{orbit.order}</Text>
+          </TouchableOpacity>
         ))}
 
         {/* Draw Sun */}
@@ -178,6 +192,8 @@ export default function Level1GameScreen({ navigation }: any) {
             planet={planet} 
             onDrop={handleDrop} 
             isPlaced={placedPlanets.includes(planet.id)} 
+            isSelected={selectedPlanetId === planet.id}
+            onSelect={setSelectedPlanetId}
           />
         ))}
       </View>
@@ -211,7 +227,12 @@ export default function Level1GameScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#000' },
+  container: { 
+    flex: 1, 
+    backgroundColor: '#000',
+    // @ts-ignore
+    touchAction: 'none'
+  },
   darkOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0, 0, 0, 0.8)' },
   closeHeaderButton: {
     position: 'absolute', top: 30, right: 20, width: 40, height: 40,
@@ -256,6 +277,12 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
+    // @ts-ignore
+    touchAction: 'none',
+  },
+  selectedItem: {
+    borderColor: '#4ade80',
+    borderWidth: 3,
   },
   draggableImage: {
     width: 45,
