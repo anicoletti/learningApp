@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#050515',
-    paddingTop: 40, // Mock safe area
+    paddingTop: Platform.OS === 'web' ? 0 : 40,
   },
   backButton: {
     padding: 15,
