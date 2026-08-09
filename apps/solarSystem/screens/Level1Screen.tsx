@@ -39,11 +39,11 @@ export default function Level1Screen({ navigation }: any) {
     const scrollXVal = event.nativeEvent.contentOffset.x;
     currentScrollXRef.current = scrollXVal;
     
-    const visibleStart = scrollXVal;
-    const visibleEnd = scrollXVal + screenWidth;
-    
+    const { width: currentWidth, height: currentHeight } = event.nativeEvent.layoutMeasurement || { width: screenWidth, height: 800 };
+    const currentScale = currentWidth < 768 ? 1 : Math.max(1, (currentHeight - 200) / 800);
+
     const visibleIds = planets.filter(p => {
-       const pX = (screenWidth < 768 ? 100 : 250) + p.orbitRadius;
+       const pX = (currentWidth < 768 ? 100 : 250) + p.orbitRadius * currentScale;
        return pX > visibleStart - 150 && pX < visibleEnd + 150;
     }).map(p => p.id);
     
@@ -71,6 +71,7 @@ export default function Level1Screen({ navigation }: any) {
   });
 
   const isMobile = screenWidth < 768;
+  const mapScale = isMobile ? 1 : Math.max(1, (useWindowDimensions().height - 200) / 800);
 
   return (
     <View style={styles.container}>
@@ -78,7 +79,7 @@ export default function Level1Screen({ navigation }: any) {
         source={{ uri: SPACE_BG }} 
         style={[
           StyleSheet.absoluteFillObject, 
-          { width: screenWidth + 500, transform: [{ translateX }] }
+          { width: screenWidth + 500, transform: [{ translateX }, { scale: 1.5 }] }
         ]}
         resizeMode="cover"
       />
@@ -120,34 +121,36 @@ export default function Level1Screen({ navigation }: any) {
         // @ts-ignore
         style={{ touchAction: 'none' }}
       >
-        <View style={[styles.scrollContent, { paddingLeft: isMobile ? 100 : 250 }]}>
+        <View style={[styles.scrollContent, { paddingLeft: isMobile ? 100 : 250, width: 3600 * mapScale }]}>
           <View style={[styles.mapCenter, isMobile && { marginTop: -150 }]}>
             
             {/* Orbit Arcs */}
             {planets.filter(p => p.id !== 'sun').map(planet => (
               <View key={`orbit-${planet.id}`} style={[styles.orbitArc, {
-                top: -planet.orbitRadius,
-                left: -planet.orbitRadius,
-                width: planet.orbitRadius * 2,
-                height: planet.orbitRadius * 2,
-                borderRadius: planet.orbitRadius,
+                top: -planet.orbitRadius * mapScale,
+                left: -planet.orbitRadius * mapScale,
+                width: planet.orbitRadius * 2 * mapScale,
+                height: planet.orbitRadius * 2 * mapScale,
+                borderRadius: planet.orbitRadius * mapScale,
               }]} />
             ))}
 
             {/* Sun */}
             <TouchableOpacity 
-              style={[styles.sunContainer, { top: -200, left: -200 }]}
+              style={[styles.sunContainer, { top: -200 * mapScale, left: -200 * mapScale, width: 400 * mapScale, height: 400 * mapScale }]}
               onPress={() => setSelectedPlanet(planets.find(p => p.id === 'sun'))}
             >
-              <Image source={planets.find(p => p.id === 'sun')?.imageSource} style={styles.sun} />
-              <Text style={styles.sunText}>Sun</Text>
+              <Image source={planets.find(p => p.id === 'sun')?.imageSource} style={[styles.sun, { width: 400 * mapScale, height: 400 * mapScale, borderRadius: 200 * mapScale }]} />
+              <Text style={[styles.sunText, { fontSize: 28 * mapScale, right: 50 * mapScale }]}>Sun</Text>
             </TouchableOpacity>
 
             {/* Planets */}
             {planets.filter(p => p.id !== 'sun').map((planet, index) => (
               <View key={planet.id} style={[styles.planetWrapper, { 
-                left: planet.orbitRadius, 
-                top: -planet.radius 
+                left: planet.orbitRadius * mapScale, 
+                top: -planet.radius * mapScale,
+                width: 200 * mapScale,
+                marginLeft: -100 * mapScale,
               }]}>
                 <TouchableOpacity onPress={() => setSelectedPlanet(planet)}>
                   {planet.imageSource ? (
@@ -156,9 +159,9 @@ export default function Level1Screen({ navigation }: any) {
                       style={[
                         styles.planet, 
                         { 
-                          width: planet.radius * 2, 
-                          height: planet.radius * 2, 
-                          borderRadius: planet.id === 'saturn' ? 0 : planet.radius 
+                          width: planet.radius * 2 * mapScale, 
+                          height: planet.radius * 2 * mapScale, 
+                          borderRadius: planet.id === 'saturn' ? 0 : planet.radius * mapScale 
                         }
                       ]} 
                       resizeMode={planet.id === 'saturn' ? 'contain' : 'cover'}
@@ -168,14 +171,14 @@ export default function Level1Screen({ navigation }: any) {
                       styles.planet,
                       {
                         backgroundColor: planet.color,
-                        width: planet.radius * 2,
-                        height: planet.radius * 2,
-                        borderRadius: planet.radius,
+                        width: planet.radius * 2 * mapScale,
+                        height: planet.radius * 2 * mapScale,
+                        borderRadius: planet.radius * mapScale,
                       }
                     ]} />
                   )}
                 </TouchableOpacity>
-                <Text style={styles.planetLabel}>{planet.name}</Text>
+                <Text style={[styles.planetLabel, { fontSize: 16 * mapScale, marginTop: 15 * mapScale }]}>{planet.name}</Text>
               </View>
             ))}
             
@@ -238,7 +241,7 @@ export default function Level1Screen({ navigation }: any) {
                   isFirstActive && { borderTopLeftRadius: 20, borderBottomLeftRadius: 20 },
                   isLastActive && { borderTopRightRadius: 20, borderBottomRightRadius: 20 },
                 ]}
-                onPress={() => scrollToPlanet(planet.orbitRadius)}
+                onPress={() => scrollToPlanet(planet.orbitRadius * mapScale)}
               >
                 <View style={[styles.indicatorDot, { backgroundColor: planet.color }]} />
               </TouchableOpacity>
@@ -316,7 +319,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   scrollContent: {
-    width: 3600,
     justifyContent: 'center',
   },
   mapCenter: {
