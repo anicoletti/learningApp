@@ -5,14 +5,14 @@ import { planets } from '../data/planets';
 const SPACE_BG = 'https://images.unsplash.com/photo-1464802686167-b939a6910659?q=80&w=3000&auto=format&fit=crop';
 
 const gameOrbits = [
-  { id: 'mercury', radius: 70, angle: Math.PI / 4, order: 1 },
-  { id: 'venus', radius: 110, angle: Math.PI * 1.2, order: 2 },
-  { id: 'earth', radius: 150, angle: Math.PI * 1.7, order: 3 },
-  { id: 'mars', radius: 190, angle: Math.PI / 1.5, order: 4 },
-  { id: 'jupiter', radius: 250, angle: Math.PI * 0.1, order: 5 },
-  { id: 'saturn', radius: 320, angle: Math.PI * 1.4, order: 6 },
-  { id: 'uranus', radius: 390, angle: Math.PI * 0.8, order: 7 },
-  { id: 'neptune', radius: 460, angle: Math.PI * 1.9, order: 8 },
+  { id: 'mercury', radius: 70, desktopAngle: Math.PI / 4, mobileAngle: 0, order: 1 },
+  { id: 'venus', radius: 110, desktopAngle: Math.PI * 1.2, mobileAngle: Math.PI / 8, order: 2 },
+  { id: 'earth', radius: 150, desktopAngle: Math.PI * 1.7, mobileAngle: -Math.PI / 8, order: 3 },
+  { id: 'mars', radius: 190, desktopAngle: Math.PI / 1.5, mobileAngle: Math.PI / 4, order: 4 },
+  { id: 'jupiter', radius: 250, desktopAngle: Math.PI * 0.1, mobileAngle: -Math.PI / 4, order: 5 },
+  { id: 'saturn', radius: 320, desktopAngle: Math.PI * 1.4, mobileAngle: Math.PI / 3, order: 6 },
+  { id: 'uranus', radius: 390, desktopAngle: Math.PI * 0.8, mobileAngle: -Math.PI / 3, order: 7 },
+  { id: 'neptune', radius: 460, desktopAngle: Math.PI * 1.9, mobileAngle: Math.PI / 2.5, order: 8 },
 ];
 
 const DraggablePlanet = ({ planet, onDrop, isPlaced, onSelect, isSelected }: any) => {
@@ -51,7 +51,11 @@ const DraggablePlanet = ({ planet, onDrop, isPlaced, onSelect, isSelected }: any
   if (isPlaced) return null;
 
   return (
-    <Animated.View {...panResponder.panHandlers} style={[pan.getLayout(), styles.draggableItem, isSelected && styles.selectedItem]}>
+    <Animated.View 
+      {...panResponder.panHandlers} 
+      // @ts-ignore
+      style={[pan.getLayout(), styles.draggableItem, isSelected && styles.selectedItem, { touchAction: 'none' }]}
+    >
       <Image 
         source={planet.imageSource} 
         style={styles.draggableImage} 
@@ -72,9 +76,10 @@ export default function Level1GameScreen({ navigation }: any) {
   const [shuffledPlanets, setShuffledPlanets] = useState<any[]>([]);
   const [selectedPlanetId, setSelectedPlanetId] = useState<string | null>(null);
 
-  const sunX = width / 2;
-  const sunY = height / 2;
-  const scale = Math.min(width / 1000, (height - 150) / 1000, 1);
+  const isMobile = width < 768;
+  const sunX = isMobile ? -30 : width / 2;
+  const sunY = isMobile ? height / 2 - 50 : height / 2;
+  const scale = isMobile ? Math.min(width / 440, 1) : Math.min(width / 1000, (height - 150) / 1000, 1);
 
   useEffect(() => {
     const p = planets.filter(p => p.id !== 'sun');
@@ -182,8 +187,8 @@ export default function Level1GameScreen({ navigation }: any) {
             <View 
               key={`placed-${id}`} 
               style={[styles.placedPlanet, {
-                left: sunX + orbit.radius * Math.cos(orbit.angle) - (pSize / 2),
-                top: sunY + orbit.radius * Math.sin(orbit.angle) - (pSize / 2),
+                left: sunX + orbit.radius * Math.cos(isMobile ? orbit.mobileAngle : orbit.desktopAngle) - (pSize / 2),
+                top: sunY + orbit.radius * Math.sin(isMobile ? orbit.mobileAngle : orbit.desktopAngle) - (pSize / 2),
                 width: pSize,
                 height: pSize,
               }]}

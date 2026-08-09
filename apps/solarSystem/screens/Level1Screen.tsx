@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Modal, Image, useWindowDimensions, Platform, Animated } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Modal, Image, useWindowDimensions, Platform, Animated, PanResponder } from 'react-native';
 import { planets } from '../data/planets';
 
 const SPACE_BG = 'https://images.unsplash.com/photo-1464802686167-b939a6910659?q=80&w=3000&auto=format&fit=crop'; // Milky Way band without foreground
@@ -16,9 +16,26 @@ export default function Level1Screen({ navigation }: any) {
     scrollViewRef.current?.scrollTo({ x: xOffset, animated: true });
   };
 
+  const currentScrollXRef = useRef(0);
+  const startScrollXRef = useRef(0);
+
+  const scrollPanResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (e, gesture) => Platform.OS === 'web' && Math.abs(gesture.dx) > 10,
+      onPanResponderGrant: () => {
+        startScrollXRef.current = currentScrollXRef.current;
+      },
+      onPanResponderMove: (e, gesture) => {
+        scrollViewRef.current?.scrollTo({ x: startScrollXRef.current - gesture.dx, animated: false });
+      }
+    })
+  ).current;
+
   const handleScroll = (event: any) => {
-    const scrollX = event.nativeEvent.contentOffset.x;
-    const viewCenter = scrollX + screenWidth / 2 - 100;
+    const scrollXVal = event.nativeEvent.contentOffset.x;
+    currentScrollXRef.current = scrollXVal;
+    
+    const viewCenter = scrollXVal + screenWidth / 2 - 100;
     
     let closestPlanet = planets[0];
     let minDiff = Infinity;
@@ -78,11 +95,14 @@ export default function Level1Screen({ navigation }: any) {
         ref={scrollViewRef as any} 
         horizontal 
         showsHorizontalScrollIndicator={Platform.OS === 'web'}
+        {...(Platform.OS === 'web' ? scrollPanResponder.panHandlers : {})}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
           { useNativeDriver: true, listener: handleScroll }
         )}
         scrollEventThrottle={16}
+        // @ts-ignore
+        style={{ touchAction: 'none' }}
       >
         <View style={styles.scrollContent}>
           <View style={styles.mapCenter}>
