@@ -79,8 +79,8 @@ export default function Level1GameScreen({ navigation }: any) {
 
   const isMobile = width < 768;
   const sunX = width / 2;
-  const sunY = isMobile ? 20 : height / 2;
-  const scale = isMobile ? Math.min(height / 850, 1) : Math.min(width / 1000, (height - 150) / 1000, 1);
+  const sunY = isMobile ? 80 : height / 2;
+  const scale = isMobile ? 1 : Math.min(width / 1000, (height - 150) / 1000, 1);
 
   useEffect(() => {
     const p = planets.filter(p => p.id !== 'sun' && p.id !== 'pluto');
