@@ -6,6 +6,7 @@ const SPACE_BG = 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q
 
 export default function Level1Screen({ navigation }: any) {
   const [selectedPlanet, setSelectedPlanet] = useState<any>(null);
+  const [activePlanetId, setActivePlanetId] = useState<string>('sun');
   const scrollViewRef = useRef<ScrollView>(null);
   const { width: screenWidth } = useWindowDimensions();
 
@@ -15,6 +16,25 @@ export default function Level1Screen({ navigation }: any) {
     scrollViewRef.current?.scrollTo({ x: xOffset, animated: true });
   };
 
+  const handleScroll = (event: any) => {
+    const scrollX = event.nativeEvent.contentOffset.x;
+    const viewCenter = scrollX + screenWidth / 2 - 100;
+    
+    let closestPlanet = planets[0];
+    let minDiff = Infinity;
+    for (const p of planets) {
+      const diff = Math.abs(p.orbitRadius - viewCenter);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestPlanet = p;
+      }
+    }
+    
+    if (closestPlanet.id !== activePlanetId) {
+      setActivePlanetId(closestPlanet.id);
+    }
+  };
+
   return (
     <ImageBackground source={{ uri: SPACE_BG }} style={styles.container}>
       <View style={styles.header}>
@@ -22,7 +42,13 @@ export default function Level1Screen({ navigation }: any) {
         <Text style={styles.subtitle}>Scroll right to explore. Tap a planet to learn more!</Text>
       </View>
 
-      <ScrollView ref={scrollViewRef} horizontal showsHorizontalScrollIndicator={false}>
+      <ScrollView 
+        ref={scrollViewRef} 
+        horizontal 
+        showsHorizontalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      >
         <View style={styles.scrollContent}>
           <View style={styles.mapCenter}>
             
@@ -115,15 +141,22 @@ export default function Level1Screen({ navigation }: any) {
       </Modal>
       {/* Bottom Indicator */}
       <View style={styles.indicatorContainer}>
-        <Text style={styles.indicatorText}>NAVIGATION LOG</Text>
+        <Text style={styles.indicatorText}>ORBITAL MAP</Text>
         <View style={styles.indicatorTrack}>
-          {planets.map(planet => (
-            <TouchableOpacity 
-              key={`ind-${planet.id}`} 
-              style={[styles.indicatorDot, { backgroundColor: planet.color }]}
-              onPress={() => scrollToPlanet(planet.orbitRadius)}
-            />
-          ))}
+          {planets.map(planet => {
+            const isActive = planet.id === activePlanetId;
+            return (
+              <TouchableOpacity 
+                key={`ind-${planet.id}`} 
+                style={[
+                  styles.indicatorDot, 
+                  { backgroundColor: planet.color },
+                  isActive && styles.indicatorDotActive
+                ]}
+                onPress={() => scrollToPlanet(planet.orbitRadius)}
+              />
+            );
+          })}
         </View>
       </View>
     </ImageBackground>
@@ -196,7 +229,6 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed',
   },
   planet: {
-    boxShadow: '0px 0px 15px rgba(255, 255, 255, 0.5)',
     zIndex: 10,
     backgroundColor: 'transparent',
   },
@@ -296,5 +328,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
     boxShadow: '0px 0px 5px rgba(255,255,255,0.5)',
+  },
+  indicatorDotActive: {
+    transform: [{ scale: 1.5 }],
+    borderWidth: 2,
+    boxShadow: '0px 0px 10px rgba(255,255,255,1)',
   }
 });
