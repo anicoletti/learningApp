@@ -250,8 +250,6 @@ const styles = StyleSheet.create({
     width: 400,
     height: 400,
     borderRadius: 200,
-    backgroundColor: '#FFD700',
-    elevation: 20,
   },
   sunText: {
     color: '#fff',
