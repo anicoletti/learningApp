@@ -16,6 +16,7 @@ if (Platform.OS === 'web' && typeof document !== 'undefined') {
     ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); border-radius: 5px; }
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 5px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.5); }
+    html, body, #root { width: 100%; height: 100%; overflow: hidden; }
   `;
   document.head.append(style);
 }
