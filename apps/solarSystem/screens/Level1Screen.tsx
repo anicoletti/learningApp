@@ -40,7 +40,7 @@ export default function Level1Screen({ navigation }: any) {
     currentScrollXRef.current = scrollXVal;
     
     const { width: currentWidth, height: currentHeight } = event.nativeEvent.layoutMeasurement || { width: screenWidth, height: 800 };
-    const currentScale = currentWidth < 768 ? 1 : Math.max(1, (currentHeight - 200) / 800);
+    const currentScale = currentWidth < 768 ? 1 : Math.max(1, currentHeight / 600);
 
     const visibleStart = scrollXVal;
     const visibleEnd = scrollXVal + currentWidth;
@@ -74,7 +74,7 @@ export default function Level1Screen({ navigation }: any) {
   });
 
   const isMobile = screenWidth < 768;
-  const mapScale = isMobile ? 1 : Math.max(1, (useWindowDimensions().height - 200) / 800);
+  const mapScale = isMobile ? 1 : Math.max(1, useWindowDimensions().height / 600);
 
   return (
     <View style={styles.container}>
