@@ -54,7 +54,15 @@ export default function Level1Screen({ navigation }: any) {
       <View style={styles.darkOverlay} />
       
       <View style={styles.header}>
-        <Text style={styles.title}>LEVEL 1: MEET THE NEIGHBORS</Text>
+        <View style={styles.headerRow}>
+          <Text style={styles.title}>LEVEL 1: MEET THE NEIGHBORS</Text>
+          <TouchableOpacity 
+            style={styles.quizButton}
+            onPress={() => navigation.navigate('Quiz')}
+          >
+            <Text style={styles.quizButtonText}>Take a Quiz!</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={styles.subtitle}>Scroll right to explore. Tap a planet to learn more!</Text>
       </View>
 
@@ -203,13 +211,32 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 20,
-    paddingTop: 10,
+    paddingTop: 60,
+    zIndex: 10,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 5,
   },
   title: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
-    letterSpacing: 1,
+    flex: 1,
+  },
+  quizButton: {
+    backgroundColor: '#8b5cf6',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginLeft: 10,
+  },
+  quizButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
   subtitle: {
     color: '#80D8FF',

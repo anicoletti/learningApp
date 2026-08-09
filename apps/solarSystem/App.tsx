@@ -6,6 +6,7 @@ import HomeScreen from './screens/HomeScreen';
 import PlanetIdScreen from './screens/PlanetIdScreen';
 import PlanetDetailScreen from './screens/PlanetDetailScreen';
 import Level1Screen from './screens/Level1Screen';
+import QuizScreen from './screens/QuizScreen';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('Home');
@@ -17,6 +18,8 @@ export default function App() {
 
   const renderScreen = () => {
     switch (currentScreen) {
+      case 'Quiz':
+        return <QuizScreen navigation={{ navigate }} />;
       case 'Level1':
         return <Level1Screen navigation={{ navigate }} />;
       case 'PlanetId':
