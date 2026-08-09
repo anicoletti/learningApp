@@ -3,7 +3,7 @@ export const planets = [
     id: 'sun', name: 'Sun', color: '#FFD700', type: 'Star', radius: 120, orbitRadius: 0, 
     info: 'The star at the center of our Solar System. A million Earths could fit inside the Sun!',
     funFact: 'The Sun makes up 99.8% of the mass of the entire solar system.',
-    imageSource: require('../assets/planets/sun_sdo.png')
+    imageSource: require('../assets/planets/sun_detailed.png')
   },
   { 
     id: 'mercury', name: 'Mercury', color: '#FF8A65', type: 'Planet', radius: 18, orbitRadius: 300, 
