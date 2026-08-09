@@ -6,7 +6,7 @@ const SPACE_BG = 'https://images.unsplash.com/photo-1464802686167-b939a6910659?q
 
 export default function Level1Screen({ navigation }: any) {
   const [selectedPlanet, setSelectedPlanet] = useState<any>(null);
-  const [activePlanetId, setActivePlanetId] = useState<string>('sun');
+  const [visiblePlanetIds, setVisiblePlanetIds] = useState<string[]>(['sun']);
   const scrollViewRef = useRef<ScrollView>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
   const { width: screenWidth } = useWindowDimensions();
@@ -31,26 +31,38 @@ export default function Level1Screen({ navigation }: any) {
     })
   ).current;
 
+  useEffect(() => {
+    handleScroll({ nativeEvent: { contentOffset: { x: 0 } } });
+  }, [screenWidth]);
+
   const handleScroll = (event: any) => {
     const scrollXVal = event.nativeEvent.contentOffset.x;
     currentScrollXRef.current = scrollXVal;
     
-    const viewCenter = scrollXVal + screenWidth / 2 - 100;
+    const visibleStart = scrollXVal;
+    const visibleEnd = scrollXVal + screenWidth;
     
-    let closestPlanet = planets[0];
-    let minDiff = Infinity;
     const orbitalPlanets = planets.filter(p => p.id !== 'pluto');
-    for (const p of orbitalPlanets) {
-      const diff = Math.abs(p.orbitRadius - viewCenter);
-      if (diff < minDiff) {
-        minDiff = diff;
-        closestPlanet = p;
+    const visibleIds = orbitalPlanets.filter(p => {
+       const pX = 250 + p.orbitRadius;
+       return pX > visibleStart - 150 && pX < visibleEnd + 150;
+    }).map(p => p.id);
+    
+    if (visibleIds.length === 0) {
+      let closestPlanet = orbitalPlanets[0];
+      let minDiff = Infinity;
+      const viewCenter = scrollXVal + screenWidth / 2 - 100;
+      for (const p of orbitalPlanets) {
+        const diff = Math.abs(p.orbitRadius - viewCenter);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestPlanet = p;
+        }
       }
+      visibleIds.push(closestPlanet.id);
     }
     
-    if (closestPlanet.id !== activePlanetId) {
-      setActivePlanetId(closestPlanet.id);
-    }
+    setVisiblePlanetIds(prev => prev.join(',') === visibleIds.join(',') ? prev : visibleIds);
   };
 
   const translateX = scrollX.interpolate({
@@ -209,18 +221,24 @@ export default function Level1Screen({ navigation }: any) {
       <View style={styles.indicatorContainer}>
         <Text style={styles.indicatorText}>ORBITAL MAP</Text>
         <View style={styles.indicatorTrack}>
-          {planets.filter(p => p.id !== 'pluto').map(planet => {
-            const isActive = planet.id === activePlanetId;
+          {planets.filter(p => p.id !== 'pluto').map((planet, index, arr) => {
+            const isActive = visiblePlanetIds.includes(planet.id);
+            const isFirstActive = isActive && !visiblePlanetIds.includes(arr[index - 1]?.id);
+            const isLastActive = isActive && !visiblePlanetIds.includes(arr[index + 1]?.id);
+
             return (
               <TouchableOpacity 
                 key={`ind-${planet.id}`} 
                 style={[
-                  styles.indicatorDot, 
-                  { backgroundColor: planet.color },
-                  isActive && styles.indicatorDotActive
+                  styles.indicatorDotWrapper,
+                  isActive && { backgroundColor: 'rgba(255,255,255,0.25)' },
+                  isFirstActive && { borderTopLeftRadius: 20, borderBottomLeftRadius: 20 },
+                  isLastActive && { borderTopRightRadius: 20, borderBottomRightRadius: 20 },
                 ]}
                 onPress={() => scrollToPlanet(planet.orbitRadius)}
-              />
+              >
+                <View style={[styles.indicatorDot, { backgroundColor: planet.color }]} />
+              </TouchableOpacity>
             );
           })}
         </View>
@@ -426,24 +444,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(20,20,40,0.8)',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 5,
+    paddingHorizontal: 8,
     borderRadius: 30,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.2)',
+  },
+  indicatorDotWrapper: {
+    paddingHorizontal: 12,
+    paddingVertical: 10,
   },
   indicatorDot: {
     width: 14,
     height: 14,
     borderRadius: 7,
-    marginHorizontal: 8,
     borderWidth: 1,
     borderColor: '#fff',
     boxShadow: '0px 0px 5px rgba(255,255,255,0.5)',
-  },
-  indicatorDotActive: {
-    transform: [{ scale: 1.5 }],
-    borderWidth: 2,
-    boxShadow: '0px 0px 10px rgba(255,255,255,1)',
   }
 });
