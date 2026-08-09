@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Modal, Image, useWindowDimensions, Platform } from 'react-native';
 import { planets } from '../data/planets';
 
-const SPACE_BG = 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1000&auto=format&fit=crop';
+const SPACE_BG = 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=3000&auto=format&fit=crop'; // Milky Way Galaxy
 
 export default function Level1Screen({ navigation }: any) {
   const [selectedPlanet, setSelectedPlanet] = useState<any>(null);
@@ -36,6 +36,8 @@ export default function Level1Screen({ navigation }: any) {
 
   return (
     <ImageBackground source={{ uri: SPACE_BG }} style={styles.container}>
+      <View style={styles.darkOverlay} />
+      
       <View style={styles.header}>
         <Text style={styles.title}>LEVEL 1: MEET THE NEIGHBORS</Text>
         <Text style={styles.subtitle}>Scroll right to explore. Tap a planet to learn more!</Text>
@@ -175,7 +177,11 @@ export default function Level1Screen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#050515',
+    backgroundColor: '#000',
+  },
+  darkOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
   },
   header: {
     padding: 20,
