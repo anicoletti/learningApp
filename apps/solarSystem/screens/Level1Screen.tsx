@@ -77,7 +77,7 @@ export default function Level1Screen({ navigation }: any) {
       <Animated.ScrollView 
         ref={scrollViewRef as any} 
         horizontal 
-        showsHorizontalScrollIndicator={false}
+        showsHorizontalScrollIndicator={Platform.OS === 'web'}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
           { useNativeDriver: true, listener: handleScroll }

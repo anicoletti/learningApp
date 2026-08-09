@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Animated, PanResponder, Image, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Animated, PanResponder, Image, useWindowDimensions, Platform } from 'react-native';
 import { planets } from '../data/planets';
 
 const SPACE_BG = 'https://images.unsplash.com/photo-1464802686167-b939a6910659?q=80&w=3000&auto=format&fit=crop';
@@ -22,6 +22,7 @@ const DraggablePlanet = ({ planet, onDrop, isPlaced, onSelect, isSelected }: any
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (e, gestureState) => Math.abs(gestureState.dx) > 2 || Math.abs(gestureState.dy) > 2,
       onPanResponderGrant: () => {
         pan.setOffset({ x: pan.x._value, y: pan.y._value });
         pan.setValue({ x: 0, y: 0 });
@@ -73,10 +74,20 @@ export default function Level1GameScreen({ navigation }: any) {
 
   const sunX = width / 2;
   const sunY = height / 2;
+  const scale = Math.min(width / 1000, (height - 150) / 1000, 1);
 
   useEffect(() => {
     const p = planets.filter(p => p.id !== 'sun');
     setShuffledPlanets(p.sort(() => 0.5 - Math.random()));
+
+    if (Platform.OS === 'web') {
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+      return () => {
+        document.body.style.overflow = 'auto';
+        document.body.style.touchAction = 'auto';
+      };
+    }
   }, []);
 
   const handleOrbitTap = (orbitId: string) => {
@@ -96,10 +107,10 @@ export default function Level1GameScreen({ navigation }: any) {
     
     // Find the closest orbit to the drop position
     let nearestOrbit = gameOrbits[0];
-    let minDiff = Math.abs(distance - gameOrbits[0].radius);
+    let minDiff = Math.abs(distance - (gameOrbits[0].radius * scale));
     
     for (const orbit of gameOrbits) {
-      const diff = Math.abs(distance - orbit.radius);
+      const diff = Math.abs(distance - (orbit.radius * scale));
       if (diff < minDiff) {
         minDiff = diff;
         nearestOrbit = orbit;
@@ -132,7 +143,7 @@ export default function Level1GameScreen({ navigation }: any) {
       <Text style={styles.headerSubtitle}>Drag and drop the planets into their correct orbits!</Text>
 
       {/* Map Area */}
-      <View style={StyleSheet.absoluteFill}>
+      <View style={[StyleSheet.absoluteFill, { transform: [{ scale }] }]}>
         
         {/* Draw Orbits (Render largest first so smaller ones can be tapped inside them) */}
         {[...gameOrbits].sort((a, b) => b.radius - a.radius).map((orbit) => (
