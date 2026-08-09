@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Modal, Image, useWindowDimensions, Platform } from 'react-native';
 import { planets } from '../data/planets';
 
-const SPACE_BG = 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=3000&auto=format&fit=crop'; // Milky Way Galaxy
+const SPACE_BG = 'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=3000&auto=format&fit=crop'; // Pure Milky Way Galaxy without foreground
 
 export default function Level1Screen({ navigation }: any) {
   const [selectedPlanet, setSelectedPlanet] = useState<any>(null);
