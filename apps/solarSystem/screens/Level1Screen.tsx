@@ -1,0 +1,300 @@
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Modal, Image, useWindowDimensions } from 'react-native';
+import { planets } from '../data/planets';
+
+const SPACE_BG = 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1000&auto=format&fit=crop';
+
+export default function Level1Screen({ navigation }: any) {
+  const [selectedPlanet, setSelectedPlanet] = useState<any>(null);
+  const scrollViewRef = useRef<ScrollView>(null);
+  const { width: screenWidth } = useWindowDimensions();
+
+  const scrollToPlanet = (orbitRadius: number) => {
+    // Center the planet on the screen approximately
+    let xOffset = Math.max(0, orbitRadius - screenWidth / 2 + 200);
+    scrollViewRef.current?.scrollTo({ x: xOffset, animated: true });
+  };
+
+  return (
+    <ImageBackground source={{ uri: SPACE_BG }} style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>LEVEL 1: MEET THE NEIGHBORS</Text>
+        <Text style={styles.subtitle}>Scroll right to explore. Tap a planet to learn more!</Text>
+      </View>
+
+      <ScrollView ref={scrollViewRef} horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.scrollContent}>
+          <View style={styles.mapCenter}>
+            
+            {/* Orbit Arcs */}
+            {planets.filter(p => p.id !== 'sun').map(planet => (
+              <View key={`orbit-${planet.id}`} style={[styles.orbitArc, {
+                top: -planet.orbitRadius,
+                left: -planet.orbitRadius,
+                width: planet.orbitRadius * 2,
+                height: planet.orbitRadius * 2,
+                borderRadius: planet.orbitRadius,
+              }]} />
+            ))}
+
+            {/* Sun */}
+            <TouchableOpacity 
+              style={[styles.sunContainer, { top: -200, left: -200 }]}
+              onPress={() => setSelectedPlanet(planets.find(p => p.id === 'sun'))}
+            >
+              <Image source={planets.find(p => p.id === 'sun')?.imageSource} style={styles.sun} />
+              <Text style={styles.sunText}>Sun</Text>
+            </TouchableOpacity>
+
+            {/* Planets */}
+            {planets.filter(p => p.id !== 'sun').map((planet, index) => (
+              <View key={planet.id} style={[styles.planetWrapper, { 
+                left: planet.orbitRadius, 
+                top: -planet.radius 
+              }]}>
+                <TouchableOpacity onPress={() => setSelectedPlanet(planet)}>
+                  {planet.imageSource ? (
+                    <Image 
+                      source={planet.imageSource}
+                      style={[
+                        styles.planet, 
+                        { 
+                          width: planet.radius * 2, 
+                          height: planet.radius * 2, 
+                          borderRadius: planet.id === 'saturn' ? 0 : planet.radius 
+                        }
+                      ]} 
+                      resizeMode={planet.id === 'saturn' ? 'contain' : 'cover'}
+                    />
+                  ) : (
+                    <View style={[
+                      styles.planet,
+                      {
+                        backgroundColor: planet.color,
+                        width: planet.radius * 2,
+                        height: planet.radius * 2,
+                        borderRadius: planet.radius,
+                      }
+                    ]} />
+                  )}
+                </TouchableOpacity>
+                <Text style={styles.planetLabel}>{planet.name}</Text>
+              </View>
+            ))}
+            
+          </View>
+        </View>
+      </ScrollView>
+
+      {/* Info Modal */}
+      <Modal visible={!!selectedPlanet} transparent={true} animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            {selectedPlanet && (
+              <>
+                {selectedPlanet.imageSource ? (
+                  <Image 
+                    source={selectedPlanet.imageSource} 
+                    style={[styles.modalPlanetIcon, { borderRadius: selectedPlanet.id === 'saturn' ? 0 : 40 }]} 
+                    resizeMode={selectedPlanet.id === 'saturn' ? 'contain' : 'cover'}
+                  />
+                ) : (
+                  <View style={[styles.modalPlanetIcon, { backgroundColor: selectedPlanet.color, borderRadius: 40 }]} />
+                )}
+                <Text style={styles.modalTitle}>{selectedPlanet.name}</Text>
+                <Text style={styles.modalType}>{selectedPlanet.type}</Text>
+                <Text style={styles.modalInfo}>{selectedPlanet.info}</Text>
+                
+                <TouchableOpacity style={styles.closeButton} onPress={() => setSelectedPlanet(null)}>
+                  <Text style={styles.closeButtonText}>AWESOME!</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        </View>
+      </Modal>
+      {/* Bottom Indicator */}
+      <View style={styles.indicatorContainer}>
+        <Text style={styles.indicatorText}>NAVIGATION LOG</Text>
+        <View style={styles.indicatorTrack}>
+          {planets.map(planet => (
+            <TouchableOpacity 
+              key={`ind-${planet.id}`} 
+              style={[styles.indicatorDot, { backgroundColor: planet.color }]}
+              onPress={() => scrollToPlanet(planet.orbitRadius)}
+            />
+          ))}
+        </View>
+      </View>
+    </ImageBackground>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#050515',
+  },
+  header: {
+    padding: 20,
+    paddingTop: 10,
+  },
+  title: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    letterSpacing: 1,
+  },
+  subtitle: {
+    color: '#80D8FF',
+    fontSize: 14,
+    marginTop: 5,
+  },
+  scrollContent: {
+    width: 3600,
+    justifyContent: 'center',
+    paddingLeft: 250, // Space so we can see the full Sun
+  },
+  mapCenter: {
+    height: 0,
+    position: 'relative',
+  },
+  sunContainer: {
+    position: 'absolute',
+    width: 400,
+    height: 400,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 100,
+  },
+  sun: {
+    width: 400,
+    height: 400,
+    borderRadius: 200,
+    backgroundColor: '#FFD700',
+    boxShadow: '0px 0px 50px rgba(255, 215, 0, 0.8)',
+    elevation: 20,
+  },
+  sunText: {
+    color: '#fff',
+    position: 'absolute',
+    right: 50,
+    fontSize: 28,
+    fontWeight: 'bold',
+  },
+  planetWrapper: {
+    position: 'absolute',
+    alignItems: 'center',
+    width: 200,
+    marginLeft: -100,
+    zIndex: 200,
+  },
+  orbitArc: {
+    position: 'absolute',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.15)',
+    borderStyle: 'dashed',
+  },
+  planet: {
+    boxShadow: '0px 0px 15px rgba(255, 255, 255, 0.5)',
+    zIndex: 10,
+    backgroundColor: 'transparent',
+  },
+  planetLabel: {
+    color: '#fff',
+    marginTop: 15,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: 'rgba(20,20,35,0.95)',
+    borderRadius: 25,
+    padding: 30,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    boxShadow: '0px 20px 40px rgba(0,0,0,0.5)',
+  },
+  modalPlanetIcon: {
+    width: 80,
+    height: 80,
+    marginBottom: 20,
+    boxShadow: '0px 0px 25px rgba(255, 255, 255, 0.6)',
+  },
+  modalTitle: {
+    color: '#fff',
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  modalType: {
+    color: '#4FC3F7',
+    fontSize: 14,
+    fontWeight: 'bold',
+    letterSpacing: 3,
+    marginBottom: 20,
+    textTransform: 'uppercase',
+  },
+  modalInfo: {
+    color: '#ddd',
+    fontSize: 18,
+    textAlign: 'center',
+    lineHeight: 28,
+    marginBottom: 35,
+  },
+  closeButton: {
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderColor: '#4FC3F7',
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    borderRadius: 30,
+  },
+  closeButtonText: {
+    color: '#4FC3F7',
+    fontWeight: 'bold',
+    fontSize: 16,
+    letterSpacing: 1,
+  },
+  indicatorContainer: {
+    position: 'absolute',
+    bottom: 30,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    zIndex: 300,
+  },
+  indicatorText: {
+    color: '#80D8FF',
+    fontSize: 10,
+    fontWeight: 'bold',
+    letterSpacing: 2,
+    marginBottom: 10,
+  },
+  indicatorTrack: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(20,20,40,0.8)',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+  },
+  indicatorDot: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    marginHorizontal: 8,
+    borderWidth: 1,
+    borderColor: '#fff',
+    boxShadow: '0px 0px 5px rgba(255,255,255,0.5)',
+  }
+});
