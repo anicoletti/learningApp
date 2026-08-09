@@ -221,7 +221,7 @@ export default function Level1Screen({ navigation }: any) {
       </Modal>
 
       {/* Bottom Indicator */}
-      <View style={styles.indicatorContainer}>
+      <View style={[styles.indicatorContainer, { bottom: isMobile ? 35 : 15 }]}>
         <Text style={styles.indicatorText}>ORBITAL MAP</Text>
         <View style={styles.indicatorTrack}>
           {planets.map((planet, index, arr) => {
@@ -446,7 +446,6 @@ const styles = StyleSheet.create({
   },
   indicatorContainer: {
     position: 'absolute',
-    bottom: 35,
     left: 0,
     right: 0,
     alignItems: 'center',
