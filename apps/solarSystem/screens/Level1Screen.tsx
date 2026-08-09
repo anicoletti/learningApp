@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Modal, Image, useWindowDimensions, Platform } from 'react-native';
-import { WebView } from 'react-native-webview';
 import { planets } from '../data/planets';
 
 const SPACE_BG = 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1000&auto=format&fit=crop';
@@ -8,7 +7,6 @@ const SPACE_BG = 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q
 export default function Level1Screen({ navigation }: any) {
   const [selectedPlanet, setSelectedPlanet] = useState<any>(null);
   const [activePlanetId, setActivePlanetId] = useState<string>('sun');
-  const [show3D, setShow3D] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
   const { width: screenWidth } = useWindowDimensions();
 
@@ -79,10 +77,7 @@ export default function Level1Screen({ navigation }: any) {
                 left: planet.orbitRadius, 
                 top: -planet.radius 
               }]}>
-                <TouchableOpacity onPress={() => {
-                  setSelectedPlanet(planet);
-                  setShow3D(false);
-                }}>
+                <TouchableOpacity onPress={() => setSelectedPlanet(planet)}>
                   {planet.imageSource ? (
                     <Image 
                       source={planet.imageSource}
@@ -122,63 +117,31 @@ export default function Level1Screen({ navigation }: any) {
           <View style={styles.modalContent}>
             {selectedPlanet && (
               <>
-                {!show3D ? (
-                  <>
-                    {selectedPlanet.imageSource ? (
-                      <Image 
-                        source={selectedPlanet.imageSource} 
-                        style={[styles.modalPlanetIcon, { borderRadius: selectedPlanet.id === 'saturn' ? 0 : 40 }]} 
-                        resizeMode={selectedPlanet.id === 'saturn' ? 'contain' : 'cover'}
-                      />
-                    ) : (
-                      <View style={[styles.modalPlanetIcon, { backgroundColor: selectedPlanet.color, borderRadius: 40 }]} />
-                    )}
-                    <Text style={styles.modalTitle}>{selectedPlanet.name}</Text>
-                    <Text style={styles.modalType}>{selectedPlanet.type}</Text>
-                    <Text style={styles.modalInfo}>{selectedPlanet.info}</Text>
-                    {selectedPlanet.funFact && (
-                      <View style={styles.funFactBox}>
-                        <Text style={styles.funFactTitle}>Did you know?</Text>
-                        <Text style={styles.funFactText}>{selectedPlanet.funFact}</Text>
-                      </View>
-                    )}
-                    
-                    {selectedPlanet.url3D && (
-                      <TouchableOpacity style={styles.button3D} onPress={() => setShow3D(true)}>
-                        <Text style={styles.button3DText}>View 3D Model</Text>
-                      </TouchableOpacity>
-                    )}
-                    
-                    <TouchableOpacity 
-                      style={styles.closeButton} 
-                      onPress={() => setSelectedPlanet(null)}
-                    >
-                      <Text style={styles.closeButtonText}>Close</Text>
-                    </TouchableOpacity>
-                  </>
+                {selectedPlanet.imageSource ? (
+                  <Image 
+                    source={selectedPlanet.imageSource} 
+                    style={[styles.modalPlanetIcon, { borderRadius: selectedPlanet.id === 'saturn' ? 0 : 40 }]} 
+                    resizeMode={selectedPlanet.id === 'saturn' ? 'contain' : 'cover'}
+                  />
                 ) : (
-                  <View style={styles.webViewContainer}>
-                    {Platform.OS === 'web' ? (
-                      <iframe 
-                        src={selectedPlanet.url3D} 
-                        style={{ width: '100%', height: '100%', border: 'none', borderRadius: 15 }} 
-                        title="3D Viewer"
-                      />
-                    ) : (
-                      <WebView 
-                        source={{ uri: selectedPlanet.url3D }} 
-                        style={styles.webView} 
-                        scrollEnabled={false}
-                      />
-                    )}
-                    <TouchableOpacity 
-                      style={[styles.closeButton, styles.close3DButton]} 
-                      onPress={() => setShow3D(false)}
-                    >
-                      <Text style={styles.closeButtonText}>Back to Info</Text>
-                    </TouchableOpacity>
+                  <View style={[styles.modalPlanetIcon, { backgroundColor: selectedPlanet.color, borderRadius: 40 }]} />
+                )}
+                <Text style={styles.modalTitle}>{selectedPlanet.name}</Text>
+                <Text style={styles.modalType}>{selectedPlanet.type}</Text>
+                <Text style={styles.modalInfo}>{selectedPlanet.info}</Text>
+                {selectedPlanet.funFact && (
+                  <View style={styles.funFactBox}>
+                    <Text style={styles.funFactTitle}>Did you know?</Text>
+                    <Text style={styles.funFactText}>{selectedPlanet.funFact}</Text>
                   </View>
                 )}
+                
+                <TouchableOpacity 
+                  style={styles.closeButton} 
+                  onPress={() => setSelectedPlanet(null)}
+                >
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </TouchableOpacity>
               </>
             )}
           </View>
@@ -343,33 +306,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     fontStyle: 'italic',
-  },
-  button3D: {
-    backgroundColor: '#3b82f6',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-    marginBottom: 15,
-  },
-  button3DText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  webViewContainer: {
-    width: '100%',
-    height: 400,
-    alignItems: 'center',
-  },
-  webView: {
-    width: 320,
-    height: 320,
-    backgroundColor: 'transparent',
-    borderRadius: 15,
-  },
-  close3DButton: {
-    marginTop: 20,
-    backgroundColor: '#333',
   },
   closeButton: {
     backgroundColor: 'transparent',
