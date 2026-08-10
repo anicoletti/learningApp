@@ -63,8 +63,8 @@ export default function PlanetDetailScreen({ routeParams }: any) {
   const planetBase = planets.find(p => p.id === planetId);
   const details = PLANET_DETAILS[planetId] || PLANET_DETAILS['default'];
 
-  const [activeTab, setActiveTab] = useState('Atmosphere');
-  const tabs = ['Atmosphere', 'Details', 'History', 'Images', '3D Render'];
+  const [activeTab, setActiveTab] = useState('Details');
+  const tabs = ['Details', 'Atmosphere', 'History', 'Images', '3D Render'];
 
   return (
     <ImageBackground source={{ uri: SPACE_BG }} style={styles.container}>
@@ -75,7 +75,7 @@ export default function PlanetDetailScreen({ routeParams }: any) {
         <Image 
           source={planetBase.imageSource} 
           style={styles.giantPlanetGraphic} 
-          resizeMode="contain"
+          resizeMode="cover"
         />
       )}
 
@@ -87,21 +87,6 @@ export default function PlanetDetailScreen({ routeParams }: any) {
         </View>
 
         <View style={styles.tabContentArea}>
-          {activeTab === 'Atmosphere' && (
-            <ScrollView>
-              <Text style={styles.sectionHeading}>ATMOSPHERIC COMPOSITION</Text>
-              <View style={styles.row}>
-                {details.comp.map((c: any, i: number) => (
-                  <View key={i} style={styles.statGroup}>
-                    <Text style={[styles.statValue, { color: planetBase?.color || '#4FC3F7' }]}>{c.val}</Text>
-                    <Text style={styles.statLabel}>{c.label}</Text>
-                  </View>
-                ))}
-              </View>
-              <Text style={styles.traceText}>Trace gases: {details.trace}</Text>
-            </ScrollView>
-          )}
-
           {activeTab === 'Details' && (
             <ScrollView>
               <Text style={styles.sectionHeading}>PLANETARY DATA</Text>
@@ -114,6 +99,21 @@ export default function PlanetDetailScreen({ routeParams }: any) {
               {details.moonsList.map((moon: string, i: number) => (
                 <Text key={i} style={styles.moonText}>• {moon}</Text>
               ))}
+            </ScrollView>
+          )}
+
+          {activeTab === 'Atmosphere' && (
+            <ScrollView>
+              <Text style={styles.sectionHeading}>ATMOSPHERIC COMPOSITION</Text>
+              <View style={styles.row}>
+                {details.comp.map((c: any, i: number) => (
+                  <View key={i} style={styles.statGroup}>
+                    <Text style={[styles.statValue, { color: planetBase?.color || '#4FC3F7' }]}>{c.val}</Text>
+                    <Text style={styles.statLabel}>{c.label}</Text>
+                  </View>
+                ))}
+              </View>
+              <Text style={styles.traceText}>Trace gases: {details.trace}</Text>
             </ScrollView>
           )}
 
@@ -173,8 +173,8 @@ export default function PlanetDetailScreen({ routeParams }: any) {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  darkOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(5, 5, 10, 0.85)' },
-  giantPlanetGraphic: { position: 'absolute', top: -150, right: -250, width: 800, height: 800, opacity: 0.9 },
+  darkOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(5, 5, 10, 0.85)', zIndex: 1 },
+  giantPlanetGraphic: { position: 'absolute', top: 0, right: '-40%', width: '100%', height: '100%', opacity: 0.9, zIndex: 2 },
   
   contentContainer: { flex: 1, padding: 30, zIndex: 10, marginTop: 40 },
   headerArea: { marginBottom: 40, maxWidth: '60%' },

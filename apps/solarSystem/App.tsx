@@ -28,36 +28,49 @@ if (Platform.OS === 'web' && typeof document !== 'undefined') {
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('Home');
   const [routeParams, setRouteParams] = useState<any>({});
+  const [history, setHistory] = useState<string[]>([]);
 
-  // Simple custom navigator to mock navigation
+  // Simple custom navigator with history stack
   const navigate = (screenName: string, params: any = {}) => {
+    setHistory(prev => [...prev, currentScreen]);
     setCurrentScreen(screenName);
     setRouteParams(params);
+  };
+
+  const goBack = () => {
+    if (history.length > 0) {
+      const newHistory = [...history];
+      const previousScreen = newHistory.pop()!;
+      setHistory(newHistory);
+      setCurrentScreen(previousScreen);
+    } else {
+      setCurrentScreen('Home');
+    }
   };
 
   const renderScreen = () => {
     switch (currentScreen) {
       case 'Level1Game':
-        return <Level1GameScreen navigation={{ navigate }} />;
+        return <Level1GameScreen navigation={{ navigate, goBack }} />;
       case 'Quiz':
-        return <QuizScreen navigation={{ navigate }} />;
+        return <QuizScreen navigation={{ navigate, goBack }} />;
       case 'Level1':
-        return <Level1Screen navigation={{ navigate }} />;
+        return <Level1Screen navigation={{ navigate, goBack }} />;
       case 'PlanetId':
-        return <PlanetIdScreen navigation={{ navigate }} />;
+        return <PlanetIdScreen navigation={{ navigate, goBack }} />;
       case 'PlanetDetail':
-        return <PlanetDetailScreen navigation={{ navigate }} routeParams={routeParams} />;
+        return <PlanetDetailScreen navigation={{ navigate, goBack }} routeParams={routeParams} />;
       case 'SpaceHub':
-        return <SpaceHubScreen navigation={{ navigate }} />;
+        return <SpaceHubScreen navigation={{ navigate, goBack }} />;
       case 'AnatomyHub':
-        return <AnatomyHubScreen navigation={{ navigate }} />;
+        return <AnatomyHubScreen navigation={{ navigate, goBack }} />;
       case 'AnatomyWeek1':
-        return <AnatomyWeek1Screen navigation={{ navigate }} />;
+        return <AnatomyWeek1Screen navigation={{ navigate, goBack }} />;
       case 'AnatomyWeek2':
-        return <AnatomyWeek2Screen navigation={{ navigate }} />;
+        return <AnatomyWeek2Screen navigation={{ navigate, goBack }} />;
       case 'Home':
       default:
-        return <HomeScreen navigation={{ navigate }} />;
+        return <HomeScreen navigation={{ navigate, goBack }} />;
     }
   };
 
@@ -65,8 +78,8 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar style="light" />
       {currentScreen !== 'Home' && (
-        <TouchableOpacity style={styles.backButton} onPress={() => navigate('Home')}>
-          <Text style={styles.backText}>← Back to Home</Text>
+        <TouchableOpacity style={styles.backButton} onPress={goBack}>
+          <Text style={styles.backText}>← Back</Text>
         </TouchableOpacity>
       )}
       {renderScreen()}
@@ -83,7 +96,11 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 15,
     backgroundColor: 'rgba(255,255,255,0.1)',
-    zIndex: 10,
+    zIndex: 100,
+    position: 'absolute',
+    top: Platform.OS === 'web' ? 10 : 40,
+    left: 10,
+    borderRadius: 8,
   },
   backText: {
     color: '#fff',
