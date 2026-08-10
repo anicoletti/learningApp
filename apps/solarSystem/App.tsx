@@ -49,31 +49,36 @@ export default function App() {
     }
   };
 
+  const replace = (screenName: string, params: any = {}) => {
+    setCurrentScreen(screenName);
+    setRouteParams(params);
+  };
+
   const renderScreen = () => {
     switch (currentScreen) {
       case 'Level1Game':
-        return <Level1GameScreen navigation={{ navigate, goBack }} />;
+        return <Level1GameScreen navigation={{ navigate, goBack, replace }} />;
       case 'Quiz':
-        return <QuizScreen navigation={{ navigate, goBack }} />;
+        return <QuizScreen navigation={{ navigate, goBack, replace }} />;
       case 'Level1':
-        return <Level1Screen navigation={{ navigate, goBack }} />;
+        return <Level1Screen navigation={{ navigate, goBack, replace }} />;
       case 'PlanetId':
-        return <PlanetIdScreen navigation={{ navigate, goBack }} />;
+        return <PlanetIdScreen navigation={{ navigate, goBack, replace }} />;
       case 'PlanetDetail':
-        return <PlanetDetailScreen navigation={{ navigate, goBack }} routeParams={routeParams} />;
+        return <PlanetDetailScreen navigation={{ navigate, goBack, replace }} routeParams={routeParams} />;
       case 'SpaceHub':
-        return <SpaceHubScreen navigation={{ navigate, goBack }} />;
+        return <SpaceHubScreen navigation={{ navigate, goBack, replace }} />;
       case 'AnatomyHub':
-        return <AnatomyHubScreen navigation={{ navigate, goBack }} />;
+        return <AnatomyHubScreen navigation={{ navigate, goBack, replace }} />;
       case 'AnatomyWeek1':
-        return <AnatomyWeek1Screen navigation={{ navigate, goBack }} />;
+        return <AnatomyWeek1Screen navigation={{ navigate, goBack, replace }} />;
       case 'AnatomyWeek2':
-        return <AnatomyWeek2Screen navigation={{ navigate, goBack }} />;
+        return <AnatomyWeek2Screen navigation={{ navigate, goBack, replace }} />;
       case 'AnatomyWeek':
-        return <AnatomyGenericScreen key={routeParams?.week} navigation={{ navigate, goBack }} routeParams={routeParams} />;
+        return <AnatomyGenericScreen key={routeParams?.week} navigation={{ navigate, goBack, replace }} routeParams={routeParams} />;
       case 'Home':
       default:
-        return <HomeScreen navigation={{ navigate, goBack }} />;
+        return <HomeScreen navigation={{ navigate, goBack, replace }} />;
     }
   };
 

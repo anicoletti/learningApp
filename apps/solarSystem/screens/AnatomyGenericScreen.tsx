@@ -159,7 +159,7 @@ export default function AnatomyGenericScreen({ navigation, routeParams }: any) {
 
   const getNextWeekAction = () => {
     if (week < 12) {
-      navigation.navigate('AnatomyWeek', { week: week + 1 });
+      navigation.replace('AnatomyWeek', { week: week + 1 });
     } else {
       navigation.navigate('AnatomyHub');
     }

@@ -129,7 +129,7 @@ export default function AnatomyWeek1Screen({ navigation }: any) {
                 <TouchableOpacity style={[styles.nextButton, { backgroundColor: 'rgba(255,255,255,0.2)' }]} onPress={() => navigation.navigate('AnatomyHub')}>
                   <Text style={[styles.nextButtonText, { color: '#fff' }]}>Back to Hub</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('AnatomyWeek2')}>
+                <TouchableOpacity style={styles.nextButton} onPress={() => navigation.replace('AnatomyWeek2')}>
                   <Text style={styles.nextButtonText}>Next Week →</Text>
                 </TouchableOpacity>
               </View>
