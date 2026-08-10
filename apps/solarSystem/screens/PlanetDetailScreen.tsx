@@ -153,19 +153,21 @@ export default function PlanetDetailScreen({ routeParams }: any) {
       </View>
 
       {/* Tab Navigation at Bottom */}
-      <View style={styles.tabBar}>
-        {tabs.map(tab => {
-          const isActive = activeTab === tab;
-          return (
-            <TouchableOpacity 
-              key={tab} 
-              style={[styles.tabButton, isActive && { backgroundColor: planetBase?.color || '#4FC3F7' }]}
-              onPress={() => setActiveTab(tab)}
-            >
-              <Text style={[styles.tabText, isActive && styles.tabTextActive]}>{tab}</Text>
-            </TouchableOpacity>
-          );
-        })}
+      <View style={styles.tabBarContainer}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabBar}>
+          {tabs.map(tab => {
+            const isActive = activeTab === tab;
+            return (
+              <TouchableOpacity 
+                key={tab} 
+                style={[styles.tabButton, isActive && { backgroundColor: planetBase?.color || '#4FC3F7' }]}
+                onPress={() => setActiveTab(tab)}
+              >
+                <Text style={[styles.tabText, isActive && styles.tabTextActive]}>{tab}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
       </View>
     </ImageBackground>
   );
@@ -202,7 +204,8 @@ const styles = StyleSheet.create({
   
   galleryImage: { width: '48%', height: 200, borderRadius: 15, marginBottom: 10, backgroundColor: '#000' },
 
-  tabBar: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: 'rgba(10,10,20,0.9)', borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.1)', gap: 10 },
+  tabBarContainer: { zIndex: 10, backgroundColor: 'rgba(10,10,20,0.9)', borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.1)' },
+  tabBar: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20, gap: 10, minWidth: '100%' },
   tabButton: { paddingVertical: 12, paddingHorizontal: 20, borderRadius: 30, borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
   tabText: { color: '#fff', fontWeight: 'bold', fontSize: 14 },
   tabTextActive: { color: '#000' }
