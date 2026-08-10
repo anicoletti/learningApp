@@ -360,8 +360,8 @@ const styles = StyleSheet.create({
   lightboxContent: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', paddingHorizontal: 20 },
   lightboxNav: { padding: 20, width: 80, alignItems: 'center' },
   lightboxNavText: { color: '#fff', fontSize: 60, fontWeight: '200' },
-  lightboxImageWrapper: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  lightboxImage: { width: '100%', height: '70%', maxHeight: 800 },
+  lightboxImageWrapper: { flex: 1, alignItems: 'center', justifyContent: 'center', width: '100%', padding: 20 },
+  lightboxImage: { flex: 1, width: '100%', minHeight: 300, maxHeight: 600 },
   lightboxDesc: { color: '#fff', fontSize: 18, marginTop: 20, textAlign: 'center', maxWidth: '80%' },
   lightboxCredit: { color: '#A0A0B0', fontSize: 12, marginTop: 10, textAlign: 'center' }
 });
