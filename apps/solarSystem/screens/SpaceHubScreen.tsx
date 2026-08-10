@@ -6,6 +6,7 @@ const SPACE_BG = 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q
 
 export default function SpaceHubScreen({ navigation }: any) {
   const modules = [
+    { id: 'intro', title: 'Introduction to Our Solar System', desc: 'Learn the basics of our celestial neighborhood.' },
     { id: 'sun', title: 'The Sun', desc: 'Our Star' },
     { id: 'mercury', title: 'Mercury', desc: 'The Swift Planet' },
     { id: 'venus', title: 'Venus', desc: 'The Morning Star' },
@@ -38,7 +39,7 @@ export default function SpaceHubScreen({ navigation }: any) {
             <TouchableOpacity 
               key={m.id} 
               style={styles.cardWrapper}
-              onPress={() => navigation.navigate('PlanetDetail', { planetId: m.id })}
+              onPress={() => m.id === 'intro' ? navigation.navigate('Level1') : navigation.navigate('PlanetDetail', { planetId: m.id })}
             >
               <ImageBackground 
                 source={planetData?.imageSource || { uri: SPACE_BG }} 
