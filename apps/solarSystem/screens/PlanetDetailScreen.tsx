@@ -6,15 +6,19 @@ const SPACE_BG = 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f41?q
 
 const PLANET_DETAILS: Record<string, any> = {
   mercury: {
-    comp: [{ val: '42%', label: 'Oxygen' }, { val: '29%', label: 'Sodium' }],
-    trace: 'Hydrogen, Helium, Potassium',
+    comp: [
+      { val: 42, label: 'Oxygen', color: '#4FC3F7' }, 
+      { val: 29, label: 'Sodium', color: '#FFD54F' },
+      { val: 22, label: 'Hydrogen', color: '#81C784' }
+    ],
+    trace: 'Helium (6%), Potassium, Argon',
     atmosphereDetails: {
       temperature: '-173°C to 427°C',
       pressure: 'Trace (Exosphere)',
       wind: 'N/A',
       features: 'None (no significant atmosphere)'
     },
-    data: { diameter: '4,879 km', mass: '0.055 Earths', moons: '0', orbit: '88 days', day: '59 Earth days' },
+    data: { diameter: '4,879 km', mass: '0.055 Earths', moons: '0', orbit: '88 days', day: '59 Earth days', distance: '57.9 million km', lightTime: '3.2 minutes', gravity: '3.7 m/s²' },
     moonsList: ['Mercury has no moons because it is too close to the Sun! Its gravity is too weak to hold onto a moon against the immense gravitational pull of the Sun.'],
     history: [
       { year: '14th Cent. BC', name: 'Assyrians', desc: 'First recorded observations.' },
@@ -29,7 +33,10 @@ const PLANET_DETAILS: Record<string, any> = {
     ]
   },
   venus: {
-    comp: [{ val: '96.5%', label: 'Carbon Dioxide' }, { val: '3.5%', label: 'Nitrogen' }],
+    comp: [
+      { val: 96.5, label: 'Carbon Dioxide', color: '#FFB74D' }, 
+      { val: 3.5, label: 'Nitrogen', color: '#64B5F6' }
+    ],
     trace: 'Sulfur dioxide, Argon, Water vapor',
     atmosphereDetails: {
       temperature: '462°C (average)',
@@ -37,7 +44,7 @@ const PLANET_DETAILS: Record<string, any> = {
       wind: 'Up to 360 km/h',
       features: 'Thick sulfuric acid clouds, polar vortexes'
     },
-    data: { diameter: '12,104 km', mass: '0.815 Earths', moons: '0', orbit: '225 days', day: '243 Earth days' },
+    data: { diameter: '12,104 km', mass: '0.815 Earths', moons: '0', orbit: '225 days', day: '243 Earth days', distance: '108.2 million km', lightTime: '6.0 minutes', gravity: '8.87 m/s²' },
     moonsList: ['Venus has no moons. Scientists believe it may have had a moon in the distant past that crashed back into the planet!'],
     history: [
       { year: '17th Cent.', name: 'Galileo', desc: 'First observed the phases of Venus.' },
@@ -52,7 +59,10 @@ const PLANET_DETAILS: Record<string, any> = {
     ]
   },
   jupiter: {
-    comp: [{ val: '89.8%', label: 'Hydrogen' }, { val: '10.2%', label: 'Helium' }],
+    comp: [
+      { val: 89.8, label: 'Hydrogen', color: '#E57373' }, 
+      { val: 10.2, label: 'Helium', color: '#FFF176' }
+    ],
     trace: 'Methane, Ammonia, Water',
     atmosphereDetails: {
       temperature: '-145°C (average)',
@@ -60,14 +70,17 @@ const PLANET_DETAILS: Record<string, any> = {
       wind: 'Up to 600 km/h',
       features: 'Great Red Spot, banded cloud layers, auroras'
     },
-    data: { diameter: '139,820 km', mass: '318 Earths', moons: '95+', orbit: '11.86 yrs', day: '9.93 hrs' },
+    data: { diameter: '139,820 km', mass: '318 Earths', moons: '95+', orbit: '11.86 yrs', day: '9.93 hrs', distance: '778.5 million km', lightTime: '43.2 minutes', gravity: '24.79 m/s²' },
     moonsList: ['Io', 'Europa', 'Ganymede', 'Callisto', '...and 91 more!'],
     history: [{ year: '2016-Present', name: 'Juno', desc: 'Mapping gravity and magnetic fields' }],
     gallery: []
   },
   // Default fallback for others
   default: {
-    comp: [{ val: '50%', label: 'Unknown' }, { val: '50%', label: 'Unknown' }],
+    comp: [
+      { val: 50, label: 'Unknown', color: '#aaa' }, 
+      { val: 50, label: 'Unknown', color: '#666' }
+    ],
     trace: 'Unknown',
     atmosphereDetails: {
       temperature: 'Unknown',
@@ -75,11 +88,53 @@ const PLANET_DETAILS: Record<string, any> = {
       wind: 'Unknown',
       features: 'Unknown'
     },
-    data: { diameter: 'Unknown', mass: 'Unknown', moons: 'Unknown', orbit: 'Unknown', day: 'Unknown' },
+    data: { diameter: 'Unknown', mass: 'Unknown', moons: 'Unknown', orbit: 'Unknown', day: 'Unknown', distance: 'Unknown', lightTime: 'Unknown', gravity: 'Unknown' },
     moonsList: ['Data coming soon!'],
     history: [],
     gallery: []
   }
+};
+
+const RadialProgress = ({ percentage, color, label }: { percentage: number, color: string, label: string }) => {
+  if (Platform.OS === 'web') {
+    return (
+      <View style={{ alignItems: 'center', marginHorizontal: 15 }}>
+        {/* @ts-ignore */}
+        <div style={{
+          width: 90,
+          height: 90,
+          borderRadius: '50%',
+          background: `conic-gradient(${color} ${percentage}%, rgba(255,255,255,0.1) 0)`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          {/* @ts-ignore */}
+          <div style={{
+            width: 76,
+            height: 76,
+            borderRadius: '50%',
+            backgroundColor: 'rgba(20,20,30,1)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#fff',
+            fontWeight: 'bold',
+            fontSize: '18px'
+          }}>
+            {percentage}%
+          </div>
+        </div>
+        <Text style={[styles.statLabel, { marginTop: 15, color: '#fff', fontWeight: 'bold' }]}>{label.toUpperCase()}</Text>
+      </View>
+    );
+  }
+  return (
+    <View style={styles.statGroup}>
+      <Text style={[styles.statValue, { color }]}>{percentage}%</Text>
+      <Text style={styles.statLabel}>{label}</Text>
+    </View>
+  );
 };
 
 const WebIframe = ({ src }: { src: string }) => {
@@ -122,6 +177,9 @@ export default function PlanetDetailScreen({ routeParams }: any) {
           {activeTab === 'Details' && (
             <ScrollView>
               <Text style={styles.sectionHeading}>PLANETARY DATA</Text>
+              <View style={styles.dataRow}><Text style={styles.dataLabel}>Distance from Sun:</Text><Text style={styles.dataValue}>{details.data.distance}</Text></View>
+              <View style={styles.dataRow}><Text style={styles.dataLabel}>Light Travel Time:</Text><Text style={styles.dataValue}>{details.data.lightTime}</Text></View>
+              <View style={styles.dataRow}><Text style={styles.dataLabel}>Gravity:</Text><Text style={styles.dataValue}>{details.data.gravity}</Text></View>
               <View style={styles.dataRow}><Text style={styles.dataLabel}>Diameter:</Text><Text style={styles.dataValue}>{details.data.diameter}</Text></View>
               <View style={styles.dataRow}><Text style={styles.dataLabel}>Mass:</Text><Text style={styles.dataValue}>{details.data.mass}</Text></View>
               <View style={styles.dataRow}><Text style={styles.dataLabel}>Orbital Period:</Text><Text style={styles.dataValue}>{details.data.orbit}</Text></View>
@@ -137,15 +195,12 @@ export default function PlanetDetailScreen({ routeParams }: any) {
           {activeTab === 'Atmosphere' && (
             <ScrollView>
               <Text style={styles.sectionHeading}>ATMOSPHERIC COMPOSITION</Text>
-              <View style={styles.row}>
+              <View style={[styles.row, { flexWrap: 'wrap', justifyContent: 'flex-start' }]}>
                 {details.comp.map((c: any, i: number) => (
-                  <View key={i} style={styles.statGroup}>
-                    <Text style={[styles.statValue, { color: planetBase?.color || '#4FC3F7' }]}>{c.val}</Text>
-                    <Text style={styles.statLabel}>{c.label}</Text>
-                  </View>
+                  <RadialProgress key={i} percentage={c.val} color={c.color} label={c.label} />
                 ))}
               </View>
-              <Text style={[styles.traceText, { marginBottom: 25 }]}>Trace gases: {details.trace}</Text>
+              <Text style={[styles.traceText, { marginBottom: 25 }]}>Other Gases (Traces): {details.trace}</Text>
 
               <Text style={styles.sectionHeading}>ATMOSPHERIC CONDITIONS</Text>
               <View style={styles.dataRow}><Text style={styles.dataLabel}>Temperature:</Text><Text style={styles.dataValue}>{details.atmosphereDetails?.temperature}</Text></View>
