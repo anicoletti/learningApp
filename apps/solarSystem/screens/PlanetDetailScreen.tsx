@@ -75,6 +75,179 @@ const PLANET_DETAILS: Record<string, any> = {
     history: [{ year: '2016-Present', name: 'Juno', desc: 'Mapping gravity and magnetic fields' }],
     gallery: []
   },
+  earth: {
+    comp: [
+      { val: 78, label: 'Nitrogen', color: '#64B5F6' }, 
+      { val: 21, label: 'Oxygen', color: '#4FC3F7' },
+      { val: 1, label: 'Argon', color: '#81C784' }
+    ],
+    trace: 'Carbon dioxide, Neon, Helium',
+    atmosphereDetails: {
+      temperature: '-89°C to 58°C',
+      pressure: '1 atm (Sea level)',
+      wind: 'Up to 400 km/h',
+      features: 'Clouds, weather systems, auroras'
+    },
+    data: { diameter: '12,742 km', mass: '1 Earth', moons: '1', orbit: '365.25 days', day: '24 hrs', distance: '149.6 million km', lightTime: '8.3 minutes', gravity: '9.8 m/s²' },
+    moonsList: ['The Moon (Luna)'],
+    history: [
+      { year: '4.5 Billion Years Ago', name: 'Formation', desc: 'Earth forms from the solar nebula.' },
+      { year: '1957', name: 'Sputnik 1', desc: 'First artificial satellite orbits Earth.' },
+      { year: '1961', name: 'Yuri Gagarin', desc: 'First human to orbit the Earth.' }
+    ],
+    gallery: [
+      { url: 'https://images-assets.nasa.gov/image/PIA18033/PIA18033~medium.jpg', desc: 'Blue Marble: Earth from Space' },
+      { url: 'https://images-assets.nasa.gov/image/iss064e022067/iss064e022067~medium.jpg', desc: 'Earth from the International Space Station' }
+    ]
+  },
+  mars: {
+    comp: [
+      { val: 95.3, label: 'Carbon Dioxide', color: '#FFB74D' }, 
+      { val: 2.7, label: 'Nitrogen', color: '#64B5F6' },
+      { val: 1.6, label: 'Argon', color: '#81C784' }
+    ],
+    trace: 'Oxygen, Carbon monoxide, Water vapor',
+    atmosphereDetails: {
+      temperature: '-153°C to 20°C',
+      pressure: '0.006 atm (Very thin)',
+      wind: 'Up to 100 km/h',
+      features: 'Global dust storms, polar ice caps'
+    },
+    data: { diameter: '6,779 km', mass: '0.107 Earths', moons: '2', orbit: '687 days', day: '24.6 hrs', distance: '227.9 million km', lightTime: '12.6 minutes', gravity: '3.7 m/s²' },
+    moonsList: ['Phobos', 'Deimos'],
+    history: [
+      { year: '1976', name: 'Viking 1 & 2', desc: 'First successful Mars landings.' },
+      { year: '2012', name: 'Curiosity', desc: 'Rover lands in Gale Crater.' },
+      { year: '2021', name: 'Perseverance', desc: 'Rover lands in Jezero Crater to seek signs of ancient life.' }
+    ],
+    gallery: [
+      { url: 'https://images-assets.nasa.gov/image/S91-32389/S91-32389~medium.jpg', desc: 'Composite image of the planet Mars taken by Hubble Space Telescope' },
+      { url: 'https://images-assets.nasa.gov/image/PIA10376/PIA10376~small.jpg', desc: 'Mars Radar Opens a Planet\'s Third Dimension' },
+      { url: 'https://images-assets.nasa.gov/image/PIA01253/PIA01253~small.jpg', desc: 'Springtime on Mars: Hubble Best View of the Red Planet' }
+    ]
+  },
+  saturn: {
+    comp: [
+      { val: 96.3, label: 'Hydrogen', color: '#E57373' }, 
+      { val: 3.2, label: 'Helium', color: '#FFF176' }
+    ],
+    trace: 'Methane, Ammonia',
+    atmosphereDetails: {
+      temperature: '-178°C (average)',
+      pressure: '>1000 atm deep inside',
+      wind: 'Up to 1,800 km/h',
+      features: 'Hexagon-shaped storm at the north pole'
+    },
+    data: { diameter: '116,460 km', mass: '95 Earths', moons: '146', orbit: '29.4 yrs', day: '10.7 hrs', distance: '1.4 billion km', lightTime: '80 minutes', gravity: '10.44 m/s²' },
+    moonsList: ['Titan', 'Enceladus', 'Mimas', '...and 143 more!'],
+    history: [
+      { year: '1610', name: 'Galileo', desc: 'First observed Saturn\'s rings.' },
+      { year: '2004-2017', name: 'Cassini', desc: 'Orbited Saturn and studied its rings and moons in unprecedented detail.' }
+    ],
+    gallery: [
+      { url: 'https://images-assets.nasa.gov/image/PIA08255/PIA08255~small.jpg', desc: 'Penumbral Fade on Saturn\'s rings' },
+      { url: 'https://images-assets.nasa.gov/image/PIA11141/PIA11141~small.jpg', desc: 'Saturn\'s Rings in stunning detail from Cassini' }
+    ]
+  },
+  uranus: {
+    comp: [
+      { val: 82.5, label: 'Hydrogen', color: '#E57373' }, 
+      { val: 15.2, label: 'Helium', color: '#FFF176' },
+      { val: 2.3, label: 'Methane', color: '#4FC3F7' }
+    ],
+    trace: 'Ammonia, Water',
+    atmosphereDetails: {
+      temperature: '-224°C',
+      pressure: 'High pressure deep inside',
+      wind: 'Up to 900 km/h',
+      features: 'Featureless blue-green disk, extreme seasonal changes'
+    },
+    data: { diameter: '50,724 km', mass: '14 Earths', moons: '28', orbit: '84 yrs', day: '17.2 hrs', distance: '2.9 billion km', lightTime: '160 minutes', gravity: '8.69 m/s²' },
+    moonsList: ['Titania', 'Oberon', 'Umbriel', 'Ariel', 'Miranda', '...and 23 more!'],
+    history: [
+      { year: '1781', name: 'William Herschel', desc: 'Discovered Uranus with a telescope.' },
+      { year: '1986', name: 'Voyager 2', desc: 'First and only spacecraft to visit Uranus.' }
+    ],
+    gallery: [
+      { url: 'https://images-assets.nasa.gov/image/PIA01282/PIA01282~small.jpg', desc: 'Hubble Observes the Planet Uranus' },
+      { url: 'https://images-assets.nasa.gov/image/PIA18182/PIA18182~medium.jpg', desc: 'Uranus as seen by NASA Voyager 2' }
+    ]
+  },
+  neptune: {
+    comp: [
+      { val: 80, label: 'Hydrogen', color: '#E57373' }, 
+      { val: 19, label: 'Helium', color: '#FFF176' },
+      { val: 1.5, label: 'Methane', color: '#4FC3F7' }
+    ],
+    trace: 'Ammonia, Water',
+    atmosphereDetails: {
+      temperature: '-214°C',
+      pressure: 'High pressure deep inside',
+      wind: 'Up to 2,100 km/h (Supersonic!)',
+      features: 'Great Dark Spot, supersonic winds, cirrus-like clouds'
+    },
+    data: { diameter: '49,244 km', mass: '17 Earths', moons: '16', orbit: '165 yrs', day: '16.1 hrs', distance: '4.5 billion km', lightTime: '250 minutes', gravity: '11.15 m/s²' },
+    moonsList: ['Triton', 'Proteus', 'Nereid', '...and 13 more!'],
+    history: [
+      { year: '1846', name: 'Urbain Le Verrier', desc: 'Discovered Neptune via mathematics before it was seen.' },
+      { year: '1989', name: 'Voyager 2', desc: 'First and only spacecraft to visit Neptune.' }
+    ],
+    gallery: [
+      { url: 'https://images-assets.nasa.gov/image/PIA02220/PIA02220~small.jpg', desc: 'Neptune Shadows and Cloud tops' },
+      { url: 'https://images-assets.nasa.gov/image/PIA17304/PIA17304~medium.jpg', desc: 'Neptune captured by Voyager' }
+    ]
+  },
+  pluto: {
+    comp: [
+      { val: 90, label: 'Nitrogen', color: '#64B5F6' }, 
+      { val: 9, label: 'Methane', color: '#4FC3F7' },
+      { val: 1, label: 'Carbon Monoxide', color: '#FFB74D' }
+    ],
+    trace: 'None',
+    atmosphereDetails: {
+      temperature: '-225°C',
+      pressure: '0.00001 atm',
+      wind: 'Unknown',
+      features: 'Blue haze visible when backlit by the Sun'
+    },
+    data: { diameter: '2,376 km', mass: '0.002 Earths', moons: '5', orbit: '248 yrs', day: '153.3 hrs', distance: '5.9 billion km', lightTime: '330 minutes', gravity: '0.62 m/s²' },
+    moonsList: ['Charon', 'Nix', 'Hydra', 'Kerberos', 'Styx'],
+    history: [
+      { year: '1930', name: 'Clyde Tombaugh', desc: 'Discovered Pluto.' },
+      { year: '2006', name: 'IAU', desc: 'Pluto reclassified as a dwarf planet.' },
+      { year: '2015', name: 'New Horizons', desc: 'First spacecraft to visit Pluto, revealing a complex world.' }
+    ],
+    gallery: [
+      { url: 'https://images-assets.nasa.gov/image/PIA21944/PIA21944~medium.jpg', desc: 'First Official Pluto Feature Names' },
+      { url: 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e000683/GSFC_20171208_Archive_e000683~small.jpg', desc: 'Pluto and its moon Charon Shine in False Color' },
+      { url: 'https://images-assets.nasa.gov/image/PIA08003/PIA08003~medium.jpg', desc: 'Newest Member of Our Solar System Artist Concept' }
+    ]
+  },
+  sun: {
+    comp: [
+      { val: 73, label: 'Hydrogen', color: '#E57373' }, 
+      { val: 25, label: 'Helium', color: '#FFF176' },
+      { val: 2, label: 'Other', color: '#ccc' }
+    ],
+    trace: 'Oxygen, Carbon, Neon, Iron',
+    atmosphereDetails: {
+      temperature: '5,500°C (Surface), 15M°C (Core)',
+      pressure: 'Over 265 billion atm (Core)',
+      wind: 'N/A (Solar Wind streams out)',
+      features: 'Sunspots, solar flares, coronal mass ejections'
+    },
+    data: { diameter: '1.39 million km', mass: '333,000 Earths', moons: '0', orbit: '230M yrs (Milky Way)', day: '25 Earth days', distance: '0 km', lightTime: '0 minutes', gravity: '274 m/s²' },
+    moonsList: ['The Sun does not have moons, but it holds all the planets in orbit!'],
+    history: [
+      { year: '1995', name: 'SOHO', desc: 'Solar observatory launched.' },
+      { year: '2010', name: 'SDO', desc: 'Solar Dynamics Observatory launched.' },
+      { year: '2018', name: 'Parker Solar Probe', desc: 'Launched to become the closest spacecraft to the Sun.' }
+    ],
+    gallery: [
+      { url: 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e001434/GSFC_20171208_Archive_e001434~small.jpg', desc: 'A stunning solar flare erupting from the Sun' },
+      { url: 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e001435/GSFC_20171208_Archive_e001435~small.jpg', desc: 'Active regions on the sun' }
+    ]
+  },
   // Default fallback for others
   default: {
     comp: [
