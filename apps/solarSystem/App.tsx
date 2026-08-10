@@ -27,10 +27,12 @@ if (Platform.OS === 'web' && typeof document !== 'undefined') {
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('Home');
+  const [routeParams, setRouteParams] = useState<any>({});
 
   // Simple custom navigator to mock navigation
-  const navigate = (screenName: string) => {
+  const navigate = (screenName: string, params: any = {}) => {
     setCurrentScreen(screenName);
+    setRouteParams(params);
   };
 
   const renderScreen = () => {
@@ -44,7 +46,7 @@ export default function App() {
       case 'PlanetId':
         return <PlanetIdScreen navigation={{ navigate }} />;
       case 'PlanetDetail':
-        return <PlanetDetailScreen navigation={{ navigate }} />;
+        return <PlanetDetailScreen navigation={{ navigate }} routeParams={routeParams} />;
       case 'SpaceHub':
         return <SpaceHubScreen navigation={{ navigate }} />;
       case 'AnatomyHub':

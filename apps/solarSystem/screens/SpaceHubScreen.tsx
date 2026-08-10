@@ -15,24 +15,44 @@ export default function SpaceHubScreen({ navigation }: any) {
         </View>
       </View>
 
-      <Text style={styles.sectionTitle}>LEVEL SELECTION</Text>
+      <Text style={styles.sectionTitle}>ASTRONOMY MODULES</Text>
       
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollContainer}>
+        
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Level1')}>
-          <Text style={styles.cardLevel}>Level 1</Text>
-          <Text style={styles.cardTitle}>Introduction to Orbits</Text>
+          <Text style={styles.cardLevel}>MODULE 1</Text>
+          <Text style={styles.cardTitle}>Introduction to Our Solar System</Text>
           <View style={styles.cardButton}>
-            <Text style={styles.cardButtonText}>PLAY</Text>
+            <Text style={styles.cardButtonText}>EXPLORE</Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('PlanetDetail')}>
-          <Text style={styles.cardLevel}>Level 5</Text>
-          <Text style={styles.cardTitle}>Jupiter: Giant of Gas</Text>
-          <View style={styles.cardButton}>
-            <Text style={styles.cardButtonText}>PLAY</Text>
-          </View>
-        </TouchableOpacity>
+        {[
+          { id: 'sun', title: 'The Sun', subtitle: 'Our Star' },
+          { id: 'mercury', title: 'Mercury', subtitle: 'The Swift Planet' },
+          { id: 'venus', title: 'Venus', subtitle: 'The Morning Star' },
+          { id: 'earth', title: 'Earth', subtitle: 'Our Home' },
+          { id: 'mars', title: 'Mars', subtitle: 'The Red Planet' },
+          { id: 'jupiter', title: 'Jupiter', subtitle: 'Giant of Gas' },
+          { id: 'saturn', title: 'Saturn', subtitle: 'The Ringed Planet' },
+          { id: 'uranus', title: 'Uranus', subtitle: 'The Ice Giant' },
+          { id: 'neptune', title: 'Neptune', subtitle: 'The Blue Planet' },
+          { id: 'pluto', title: 'Pluto & Dwarf Planets', subtitle: 'The Outer Reaches' },
+        ].map((item, index) => (
+          <TouchableOpacity 
+            key={item.id} 
+            style={styles.card} 
+            onPress={() => navigation.navigate('PlanetDetail', { planetId: item.id })}
+          >
+            <Text style={styles.cardLevel}>MODULE {index + 2}</Text>
+            <Text style={styles.cardTitle}>{item.title}</Text>
+            <Text style={{ color: '#aaa', marginBottom: 20 }}>{item.subtitle}</Text>
+            <View style={styles.cardButton}>
+              <Text style={styles.cardButtonText}>EXPLORE</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+
       </ScrollView>
     </ImageBackground>
   );
