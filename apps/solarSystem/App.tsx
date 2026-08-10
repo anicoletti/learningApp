@@ -70,7 +70,7 @@ export default function App() {
       case 'AnatomyWeek2':
         return <AnatomyWeek2Screen navigation={{ navigate, goBack }} />;
       case 'AnatomyWeek':
-        return <AnatomyGenericScreen navigation={{ navigate, goBack }} routeParams={routeParams} />;
+        return <AnatomyGenericScreen key={routeParams?.week} navigation={{ navigate, goBack }} routeParams={routeParams} />;
       case 'Home':
       default:
         return <HomeScreen navigation={{ navigate, goBack }} />;

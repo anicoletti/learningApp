@@ -142,8 +142,8 @@ export default function AnatomyWeek2Screen({ navigation }: any) {
             <View style={styles.successTray}>
               <Text style={styles.successTitle}>Skeleton Assembled!</Text>
               <Text style={styles.successText}>The Axial Skeleton is made of the Skull, Ribs, Vertebrae, and Sternum!</Text>
-              <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('AnatomyHub')}>
-                <Text style={styles.nextButtonText}>Back to Hub</Text>
+              <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('AnatomyWeek', { week: 3 })}>
+                <Text style={styles.nextButtonText}>Next Week →</Text>
               </TouchableOpacity>
             </View>
           )}
