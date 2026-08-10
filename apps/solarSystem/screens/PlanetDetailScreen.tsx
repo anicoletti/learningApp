@@ -8,6 +8,12 @@ const PLANET_DETAILS: Record<string, any> = {
   mercury: {
     comp: [{ val: '42%', label: 'Oxygen' }, { val: '29%', label: 'Sodium' }],
     trace: 'Hydrogen, Helium, Potassium',
+    atmosphereDetails: {
+      temperature: '-173°C to 427°C',
+      pressure: 'Trace (Exosphere)',
+      wind: 'N/A',
+      features: 'None (no significant atmosphere)'
+    },
     data: { diameter: '4,879 km', mass: '0.055 Earths', moons: '0', orbit: '88 days', day: '59 Earth days' },
     moonsList: ['Mercury has no moons because it is too close to the Sun! Its gravity is too weak to hold onto a moon against the immense gravitational pull of the Sun.'],
     history: [
@@ -25,6 +31,12 @@ const PLANET_DETAILS: Record<string, any> = {
   venus: {
     comp: [{ val: '96.5%', label: 'Carbon Dioxide' }, { val: '3.5%', label: 'Nitrogen' }],
     trace: 'Sulfur dioxide, Argon, Water vapor',
+    atmosphereDetails: {
+      temperature: '462°C (average)',
+      pressure: '92 times Earth\'s pressure',
+      wind: 'Up to 360 km/h',
+      features: 'Thick sulfuric acid clouds, polar vortexes'
+    },
     data: { diameter: '12,104 km', mass: '0.815 Earths', moons: '0', orbit: '225 days', day: '243 Earth days' },
     moonsList: ['Venus has no moons. Scientists believe it may have had a moon in the distant past that crashed back into the planet!'],
     history: [
@@ -39,10 +51,30 @@ const PLANET_DETAILS: Record<string, any> = {
       'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=400&auto=format&fit=crop'
     ]
   },
+  jupiter: {
+    comp: [{ val: '89.8%', label: 'Hydrogen' }, { val: '10.2%', label: 'Helium' }],
+    trace: 'Methane, Ammonia, Water',
+    atmosphereDetails: {
+      temperature: '-145°C (average)',
+      pressure: '>1000 atm deep inside',
+      wind: 'Up to 600 km/h',
+      features: 'Great Red Spot, banded cloud layers, auroras'
+    },
+    data: { diameter: '139,820 km', mass: '318 Earths', moons: '95+', orbit: '11.86 yrs', day: '9.93 hrs' },
+    moonsList: ['Io', 'Europa', 'Ganymede', 'Callisto', '...and 91 more!'],
+    history: [{ year: '2016-Present', name: 'Juno', desc: 'Mapping gravity and magnetic fields' }],
+    gallery: []
+  },
   // Default fallback for others
   default: {
     comp: [{ val: '50%', label: 'Unknown' }, { val: '50%', label: 'Unknown' }],
     trace: 'Unknown',
+    atmosphereDetails: {
+      temperature: 'Unknown',
+      pressure: 'Unknown',
+      wind: 'Unknown',
+      features: 'Unknown'
+    },
     data: { diameter: 'Unknown', mass: 'Unknown', moons: 'Unknown', orbit: 'Unknown', day: 'Unknown' },
     moonsList: ['Data coming soon!'],
     history: [],
@@ -113,7 +145,15 @@ export default function PlanetDetailScreen({ routeParams }: any) {
                   </View>
                 ))}
               </View>
-              <Text style={styles.traceText}>Trace gases: {details.trace}</Text>
+              <Text style={[styles.traceText, { marginBottom: 25 }]}>Trace gases: {details.trace}</Text>
+
+              <Text style={styles.sectionHeading}>ATMOSPHERIC CONDITIONS</Text>
+              <View style={styles.dataRow}><Text style={styles.dataLabel}>Temperature:</Text><Text style={styles.dataValue}>{details.atmosphereDetails?.temperature}</Text></View>
+              <View style={styles.dataRow}><Text style={styles.dataLabel}>Pressure:</Text><Text style={styles.dataValue}>{details.atmosphereDetails?.pressure}</Text></View>
+              <View style={styles.dataRow}><Text style={styles.dataLabel}>Wind Speeds:</Text><Text style={styles.dataValue}>{details.atmosphereDetails?.wind}</Text></View>
+              
+              <Text style={[styles.sectionHeading, { marginTop: 20 }]}>VISIBLE FEATURES</Text>
+              <Text style={styles.moonText}>{details.atmosphereDetails?.features}</Text>
             </ScrollView>
           )}
 
