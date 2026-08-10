@@ -45,6 +45,7 @@ export default function SpaceHubScreen({ navigation }: any) {
                 source={planetData?.imageSource || { uri: SPACE_BG }} 
                 style={styles.card}
                 imageStyle={styles.cardImage}
+                resizeMode="cover"
               >
                 <View style={styles.cardDarkOverlay} />
                 <Text style={styles.cardLevel}>MODULE {index + 1}</Text>
