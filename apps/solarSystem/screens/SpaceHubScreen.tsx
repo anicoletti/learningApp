@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Image } from 'react-native';
 import { planets } from '../data/planets';
 
-const SPACE_BG = 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1000&auto=format&fit=crop';
+const SPACE_BG = 'https://images-assets.nasa.gov/image/NHQ202508030001/NHQ202508030001~orig.jpg';
 
 export default function SpaceHubScreen({ navigation }: any) {
   const modules = [
@@ -41,17 +41,21 @@ export default function SpaceHubScreen({ navigation }: any) {
               style={styles.cardWrapper}
               onPress={() => m.id === 'intro' ? navigation.navigate('Level1') : navigation.navigate('PlanetDetail', { planetId: m.id })}
             >
-              <ImageBackground 
-                source={planetData?.imageSource || { uri: SPACE_BG }} 
-                style={styles.card}
-                imageStyle={styles.cardImage}
-                resizeMode="cover"
-              >
+              <View style={styles.card}>
+                <Image 
+                  source={planetData?.imageSource || { uri: SPACE_BG }} 
+                  style={[
+                    StyleSheet.absoluteFillObject, 
+                    { width: '100%', height: '100%', opacity: 0.8 },
+                    planetData && m.id !== 'sun' ? { transform: [{ scale: 2.2 }, { translateX: -15 }, { translateY: -15 }] } : null
+                  ]}
+                  resizeMode={planetData ? "contain" : "cover"}
+                />
                 <View style={styles.cardDarkOverlay} />
                 <Text style={styles.cardLevel}>MODULE {index + 1}</Text>
                 <Text style={styles.cardTitle}>{m.title}</Text>
                 <Text style={styles.cardDesc}>{m.desc}</Text>
-              </ImageBackground>
+              </View>
             </TouchableOpacity>
           );
         })}
@@ -70,8 +74,7 @@ const styles = StyleSheet.create({
   sectionTitle: { color: '#A0A0B0', fontSize: 16, fontWeight: 'bold', letterSpacing: 2, marginBottom: 20 },
   scrollContainer: { flexGrow: 0 },
   cardWrapper: { width: 220, height: 300, borderRadius: 20, marginRight: 20, overflow: 'hidden' },
-  card: { flex: 1, padding: 20, justifyContent: 'flex-end' },
-  cardImage: { opacity: 0.8 },
+  card: { flex: 1, padding: 20, justifyContent: 'flex-end', backgroundColor: 'transparent' },
   cardDarkOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(10, 10, 20, 0.65)' },
   cardLevel: { color: '#4FC3F7', fontSize: 14, fontWeight: 'bold', marginBottom: 5, zIndex: 2 },
   cardTitle: { color: '#fff', fontSize: 22, fontWeight: 'bold', marginBottom: 10, zIndex: 2 },
