@@ -12,6 +12,7 @@ import SpaceHubScreen from './screens/SpaceHubScreen';
 import AnatomyHubScreen from './screens/AnatomyHubScreen';
 import AnatomyWeek1Screen from './screens/AnatomyWeek1Screen';
 import AnatomyWeek2Screen from './screens/AnatomyWeek2Screen';
+import AnatomyGenericScreen from './screens/AnatomyGenericScreen';
 
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
   const style = document.createElement('style');
@@ -68,6 +69,8 @@ export default function App() {
         return <AnatomyWeek1Screen navigation={{ navigate, goBack }} />;
       case 'AnatomyWeek2':
         return <AnatomyWeek2Screen navigation={{ navigate, goBack }} />;
+      case 'AnatomyWeek':
+        return <AnatomyGenericScreen navigation={{ navigate, goBack }} routeParams={routeParams} />;
       case 'Home':
       default:
         return <HomeScreen navigation={{ navigate, goBack }} />;

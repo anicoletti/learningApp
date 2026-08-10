@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
 
 const BG_URL = 'https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=3000&auto=format&fit=crop';
@@ -18,7 +18,8 @@ export default function AnatomyWeek1Screen({ navigation }: any) {
   });
   const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
 
-  const availableLabels = SLIDES.filter(s => !Object.values(placed).includes(s.id));
+  const shuffledSlides = useMemo(() => [...SLIDES].sort(() => Math.random() - 0.5), []);
+  const availableLabels = shuffledSlides.filter(s => !Object.values(placed).includes(s.id));
   const isComplete = Object.values(placed).every(v => v !== null);
 
   const handleSlideTap = (index: number) => {
@@ -36,8 +37,11 @@ export default function AnatomyWeek1Screen({ navigation }: any) {
     <ImageBackground source={{ uri: BG_URL }} style={styles.container}>
       <View style={styles.darkOverlay} />
       
-      <TouchableOpacity style={styles.closeButton} onPress={() => navigation.navigate('AnatomyHub')}>
-        <Text style={styles.closeText}>✕</Text>
+      <TouchableOpacity 
+        style={[styles.closeButton, isPlaying && { backgroundColor: 'rgba(79, 195, 247, 0.2)', paddingHorizontal: 15 }]} 
+        onPress={() => isPlaying ? setIsPlaying(false) : navigation.navigate('AnatomyHub')}
+      >
+        <Text style={styles.closeText}>{isPlaying ? '← Back to Lesson' : '✕'}</Text>
       </TouchableOpacity>
 
       <View style={styles.header}>

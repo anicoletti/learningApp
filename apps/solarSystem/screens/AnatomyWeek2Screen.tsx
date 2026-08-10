@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
 
 const BG_URL = 'https://images.unsplash.com/photo-1530213786676-4c5520e03e48?q=80&w=3000&auto=format&fit=crop';
@@ -23,7 +23,8 @@ export default function AnatomyWeek2Screen({ navigation }: any) {
   
   const [selectedBone, setSelectedBone] = useState<string | null>(null);
 
-  const availableBones = BONES.filter(b => !Object.values(placed).includes(b.id));
+  const shuffledBones = useMemo(() => [...BONES].sort(() => Math.random() - 0.5), []);
+  const availableBones = shuffledBones.filter(b => !Object.values(placed).includes(b.id));
   const isComplete = Object.values(placed).every(v => v !== null);
 
   const handleZoneTap = (zoneId: string) => {
@@ -39,8 +40,11 @@ export default function AnatomyWeek2Screen({ navigation }: any) {
     <ImageBackground source={{ uri: BG_URL }} style={styles.container}>
       <View style={styles.darkOverlay} />
       
-      <TouchableOpacity style={styles.closeButton} onPress={() => navigation.navigate('AnatomyHub')}>
-        <Text style={styles.closeText}>✕</Text>
+      <TouchableOpacity 
+        style={[styles.closeButton, isPlaying && { backgroundColor: 'rgba(79, 195, 247, 0.2)', paddingHorizontal: 15 }]} 
+        onPress={() => isPlaying ? setIsPlaying(false) : navigation.navigate('AnatomyHub')}
+      >
+        <Text style={styles.closeText}>{isPlaying ? '← Back to Lesson' : '✕'}</Text>
       </TouchableOpacity>
 
       <View style={styles.header}>

@@ -30,13 +30,17 @@ export default function AnatomyHubScreen({ navigation }: any) {
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollContainer}>
         {weeks.map((w) => {
-          const isLocked = w.week > 2;
+          const isLocked = false;
           return (
             <TouchableOpacity 
               key={`week-${w.week}`} 
               style={[styles.card, isLocked && styles.cardLocked]} 
               disabled={isLocked}
-              onPress={() => navigation.navigate(`AnatomyWeek${w.week}`)}
+              onPress={() => {
+                if (w.week === 1) navigation.navigate('AnatomyWeek1');
+                else if (w.week === 2) navigation.navigate('AnatomyWeek2');
+                else navigation.navigate('AnatomyWeek', { week: w.week });
+              }}
             >
               <Text style={[styles.cardWeek, isLocked && { color: '#777' }]}>WEEK {w.week}</Text>
               <Text style={[styles.cardTitle, isLocked && { color: '#555' }]}>{w.title}</Text>
