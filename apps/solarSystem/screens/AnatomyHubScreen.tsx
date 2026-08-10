@@ -30,15 +30,25 @@ export default function AnatomyHubScreen({ navigation }: any) {
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.grid}>
-          {weeks.map((w) => (
-            <TouchableOpacity key={`week-${w.week}`} style={styles.card} onPress={() => {}}>
-              <Text style={styles.cardWeek}>WEEK {w.week}</Text>
-              <Text style={styles.cardTitle}>{w.title}</Text>
-              <View style={styles.cardButton}>
-                <Text style={styles.cardButtonText}>START</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+          {weeks.map((w) => {
+            const isLocked = w.week > 2;
+            return (
+              <TouchableOpacity 
+                key={`week-${w.week}`} 
+                style={[styles.card, isLocked && styles.cardLocked]} 
+                disabled={isLocked}
+                onPress={() => navigation.navigate(`AnatomyWeek${w.week}`)}
+              >
+                <Text style={[styles.cardWeek, isLocked && { color: '#555' }]}>WEEK {w.week}</Text>
+                <Text style={[styles.cardTitle, isLocked && { color: '#777' }]}>{w.title}</Text>
+                <View style={[styles.cardButton, isLocked && { borderColor: '#555' }]}>
+                  <Text style={[styles.cardButtonText, isLocked && { color: '#555' }]}>
+                    {isLocked ? 'LOCKED' : 'START'}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </View>
       </ScrollView>
     </ImageBackground>
@@ -54,6 +64,7 @@ const styles = StyleSheet.create({
   scrollContent: { padding: 20, paddingBottom: 60 },
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 20 },
   card: { backgroundColor: 'rgba(30, 20, 20, 0.8)', width: 160, height: 200, borderRadius: 15, padding: 15, borderWidth: 1, borderColor: '#FF5252', justifyContent: 'space-between', alignItems: 'center' },
+  cardLocked: { borderColor: '#555', backgroundColor: 'rgba(20,20,20,0.8)' },
   cardWeek: { color: '#FF5252', fontSize: 14, fontWeight: 'bold' },
   cardTitle: { color: '#fff', fontSize: 18, fontWeight: 'bold', textAlign: 'center' },
   cardButton: { backgroundColor: 'transparent', borderWidth: 1, borderColor: '#FF5252', paddingVertical: 8, paddingHorizontal: 20, borderRadius: 15 },

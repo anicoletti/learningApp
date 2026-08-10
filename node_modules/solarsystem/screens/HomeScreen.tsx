@@ -10,10 +10,10 @@ export default function HomeScreen({ navigation }: any) {
       
       <View style={styles.mascotContainer}>
         <View style={styles.mascotPlaceholder}>
-          <Text style={{ fontSize: 40 }}>🧬</Text>
+          <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Sol</Text>
         </View>
         <View style={styles.speechBubble}>
-          <Text style={styles.mascotName}>Dr. Helix</Text>
+          <Text style={styles.mascotName}>Sol</Text>
           <Text style={styles.speechText}>Welcome to the Science Hub! Which subject shall we explore today?</Text>
         </View>
       </View>
@@ -67,9 +67,9 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   darkOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(10, 10, 20, 0.7)' },
   mascotContainer: { flexDirection: 'row', alignItems: 'center', marginBottom: 40, marginTop: 40, paddingHorizontal: 20 },
-  mascotPlaceholder: { width: 90, height: 90, borderRadius: 45, backgroundColor: '#4FC3F7', justifyContent: 'center', alignItems: 'center', boxShadow: '0px 0px 15px rgba(79, 195, 247, 0.6)', elevation: 10, borderWidth: 3, borderColor: '#fff' },
-  mascotName: { color: '#4FC3F7', fontWeight: 'bold', fontSize: 16, marginBottom: 5 },
-  speechBubble: { flex: 1, backgroundColor: 'rgba(25, 25, 45, 0.85)', padding: 15, borderRadius: 15, marginLeft: 15, borderWidth: 1, borderColor: '#4FC3F7' },
+  mascotPlaceholder: { width: 90, height: 90, borderRadius: 45, backgroundColor: '#FFD700', justifyContent: 'center', alignItems: 'center', boxShadow: '0px 0px 15px rgba(255, 215, 0, 0.6)', elevation: 10, borderWidth: 3, borderColor: '#fff' },
+  mascotName: { color: '#FFD700', fontWeight: 'bold', fontSize: 16, marginBottom: 5 },
+  speechBubble: { flex: 1, backgroundColor: 'rgba(25, 25, 45, 0.85)', padding: 15, borderRadius: 15, marginLeft: 15, borderWidth: 1, borderColor: '#FFD700' },
   speechText: { color: '#fff', fontSize: 16, lineHeight: 24 },
   sectionTitle: { color: '#A0A0B0', fontSize: 18, fontWeight: 'bold', letterSpacing: 2, marginBottom: 20, paddingHorizontal: 20 },
   scrollContainer: { flexGrow: 0, paddingHorizontal: 20 },

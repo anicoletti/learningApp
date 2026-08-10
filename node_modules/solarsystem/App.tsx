@@ -10,6 +10,8 @@ import QuizScreen from './screens/QuizScreen';
 import Level1GameScreen from './screens/Level1GameScreen';
 import SpaceHubScreen from './screens/SpaceHubScreen';
 import AnatomyHubScreen from './screens/AnatomyHubScreen';
+import AnatomyWeek1Screen from './screens/AnatomyWeek1Screen';
+import AnatomyWeek2Screen from './screens/AnatomyWeek2Screen';
 
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
   const style = document.createElement('style');
@@ -47,6 +49,10 @@ export default function App() {
         return <SpaceHubScreen navigation={{ navigate }} />;
       case 'AnatomyHub':
         return <AnatomyHubScreen navigation={{ navigate }} />;
+      case 'AnatomyWeek1':
+        return <AnatomyWeek1Screen navigation={{ navigate }} />;
+      case 'AnatomyWeek2':
+        return <AnatomyWeek2Screen navigation={{ navigate }} />;
       case 'Home':
       default:
         return <HomeScreen navigation={{ navigate }} />;
