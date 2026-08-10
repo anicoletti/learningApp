@@ -1,93 +1,105 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, Platform, Image } from 'react-native';
 import { planets } from '../data/planets';
 
 const PLANET_DETAILS: Record<string, any> = {
-  sun: {
-    bg: 'https://images.unsplash.com/photo-1532687353974-9842426980ee?q=80&w=1000&auto=format&fit=crop',
-    comp: [{ val: '73%', label: 'Hydrogen' }, { val: '25%', label: 'Helium' }],
-    trace: 'Oxygen, Carbon, Neon, Iron',
-    data: { diameter: '1.39 million km', mass: '333,000 Earths', moons: '0', orbit: 'N/A', day: '27 Earth days' },
-    missions: [{ year: '2018-Present', name: 'Parker Solar Probe', desc: 'Touching the Sun\'s corona' }]
-  },
   mercury: {
     bg: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?q=80&w=1000&auto=format&fit=crop',
     comp: [{ val: '42%', label: 'Oxygen' }, { val: '29%', label: 'Sodium' }],
     trace: 'Hydrogen, Helium, Potassium',
     data: { diameter: '4,879 km', mass: '0.055 Earths', moons: '0', orbit: '88 days', day: '59 Earth days' },
-    missions: [{ year: '2004-2015', name: 'MESSENGER', desc: 'Orbited and mapped Mercury' }]
+    moonsList: ['Mercury has no moons because it is too close to the Sun! Its gravity is too weak to hold onto a moon against the immense gravitational pull of the Sun.'],
+    missions: [
+      { year: '1974-1975', name: 'Mariner 10', desc: 'First spacecraft to visit Mercury.' },
+      { year: '2004-2015', name: 'MESSENGER', desc: 'First orbiter, mapped 100% of the surface.' },
+      { year: '2018-Present', name: 'BepiColombo', desc: 'En route, joint ESA/JAXA mission.' }
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=400&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1614728263952-84ea256f9679?q=80&w=400&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1532687353974-9842426980ee?q=80&w=400&auto=format&fit=crop'
+    ]
   },
   venus: {
     bg: 'https://images.unsplash.com/photo-1614726365723-4993b5443216?q=80&w=1000&auto=format&fit=crop',
     comp: [{ val: '96.5%', label: 'Carbon Dioxide' }, { val: '3.5%', label: 'Nitrogen' }],
     trace: 'Sulfur dioxide, Argon, Water vapor',
     data: { diameter: '12,104 km', mass: '0.815 Earths', moons: '0', orbit: '225 days', day: '243 Earth days' },
-    missions: [{ year: '1989-1994', name: 'Magellan', desc: 'Radar mapped the surface' }]
-  },
-  earth: {
-    bg: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=1000&auto=format&fit=crop',
-    comp: [{ val: '78%', label: 'Nitrogen' }, { val: '21%', label: 'Oxygen' }],
-    trace: 'Argon, Carbon Dioxide, Water vapor',
-    data: { diameter: '12,742 km', mass: '1 Earth', moons: '1', orbit: '365.25 days', day: '24 hours' },
-    missions: [{ year: '1957-Present', name: 'Thousands of Satellites', desc: 'Monitoring our home planet' }]
-  },
-  mars: {
-    bg: 'https://images.unsplash.com/photo-1614729939124-03290b56c9ce?q=80&w=1000&auto=format&fit=crop',
-    comp: [{ val: '95%', label: 'Carbon Dioxide' }, { val: '2.6%', label: 'Nitrogen' }],
-    trace: 'Argon, Oxygen, Carbon monoxide',
-    data: { diameter: '6,779 km', mass: '0.107 Earths', moons: '2', orbit: '687 days', day: '24.6 hours' },
-    missions: [{ year: '2012-Present', name: 'Curiosity', desc: 'Exploring Gale Crater' }]
+    moonsList: ['Venus has no moons. Scientists believe it may have had a moon in the distant past that crashed back into the planet!'],
+    missions: [
+      { year: '1962', name: 'Mariner 2', desc: 'First successful planetary flyby.' },
+      { year: '1970', name: 'Venera 7', desc: 'First successful landing on another planet.' },
+      { year: '1989-1994', name: 'Magellan', desc: 'High-resolution radar mapping.' },
+      { year: '2015-Present', name: 'Akatsuki', desc: 'Climate orbiter studying the atmosphere.' }
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1614726365723-4993b5443216?q=80&w=400&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=400&auto=format&fit=crop'
+    ]
   },
   jupiter: {
     bg: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=1000&auto=format&fit=crop',
     comp: [{ val: '89.8%', label: 'Hydrogen' }, { val: '10.2%', label: 'Helium' }],
     trace: 'Methane, Ammonia, Water',
     data: { diameter: '139,820 km', mass: '318 Earths', moons: '95+', orbit: '11.86 yrs', day: '9.93 hrs' },
-    missions: [{ year: '2016-Present', name: 'Juno', desc: 'Mapping gravity and magnetic fields' }]
+    moonsList: ['Io', 'Europa', 'Ganymede', 'Callisto', '...and 91 more!'],
+    missions: [{ year: '2016-Present', name: 'Juno', desc: 'Mapping gravity and magnetic fields' }],
+    gallery: []
   },
-  saturn: {
-    bg: 'https://images.unsplash.com/photo-1614732414444-096e5f1122d5?q=80&w=1000&auto=format&fit=crop',
-    comp: [{ val: '96.3%', label: 'Hydrogen' }, { val: '3.2%', label: 'Helium' }],
-    trace: 'Methane, Ammonia',
-    data: { diameter: '116,460 km', mass: '95 Earths', moons: '146+', orbit: '29.5 yrs', day: '10.7 hrs' },
-    missions: [{ year: '1997-2017', name: 'Cassini', desc: 'Studied the planet and its rings' }]
-  },
-  uranus: {
-    bg: 'https://images.unsplash.com/photo-1614732414444-096e5f1122d5?q=80&w=1000&auto=format&fit=crop', // Reusing Saturn/Gas giant bg for now
-    comp: [{ val: '83%', label: 'Hydrogen' }, { val: '15%', label: 'Helium' }],
-    trace: 'Methane (gives it blue color)',
-    data: { diameter: '50,724 km', mass: '14 Earths', moons: '27+', orbit: '84 yrs', day: '17.2 hrs' },
-    missions: [{ year: '1986', name: 'Voyager 2', desc: 'Only spacecraft to visit Uranus' }]
-  },
-  neptune: {
-    bg: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=1000&auto=format&fit=crop',
-    comp: [{ val: '80%', label: 'Hydrogen' }, { val: '19%', label: 'Helium' }],
-    trace: 'Methane',
-    data: { diameter: '49,244 km', mass: '17 Earths', moons: '14+', orbit: '165 yrs', day: '16.1 hrs' },
-    missions: [{ year: '1989', name: 'Voyager 2', desc: 'Only spacecraft to visit Neptune' }]
-  },
-  pluto: {
-    bg: 'https://images.unsplash.com/photo-1614728263952-84ea256f9679?q=80&w=1000&auto=format&fit=crop',
-    comp: [{ val: '90%', label: 'Nitrogen' }, { val: '10%', label: 'Methane' }],
-    trace: 'Carbon monoxide',
-    data: { diameter: '2,376 km', mass: '0.002 Earths', moons: '5', orbit: '248 yrs', day: '153.3 hrs' },
-    missions: [{ year: '2015', name: 'New Horizons', desc: 'First flyby of Pluto' }]
+  // Default fallback for others
+  default: {
+    bg: 'https://images.unsplash.com/photo-1532687353974-9842426980ee?q=80&w=1000&auto=format&fit=crop',
+    comp: [{ val: '50%', label: 'Unknown' }, { val: '50%', label: 'Unknown' }],
+    trace: 'Unknown',
+    data: { diameter: 'Unknown', mass: 'Unknown', moons: 'Unknown', orbit: 'Unknown', day: 'Unknown' },
+    moonsList: ['Data coming soon!'],
+    missions: [],
+    gallery: []
   }
+};
+
+const WebIframe = ({ src }: { src: string }) => {
+  if (Platform.OS === 'web') {
+    // @ts-ignore
+    return <iframe src={src} style={{ width: '100%', height: 400, border: 'none', borderRadius: 15 }} title="3D Viewer" />;
+  }
+  return <Text style={{color: '#fff'}}>3D Viewer only available on Web.</Text>;
 };
 
 export default function PlanetDetailScreen({ routeParams }: any) {
   const planetId = routeParams?.planetId || 'jupiter';
   const planetBase = planets.find(p => p.id === planetId);
-  const details = PLANET_DETAILS[planetId] || PLANET_DETAILS['jupiter'];
+  const details = PLANET_DETAILS[planetId] || PLANET_DETAILS['default'];
 
   return (
     <ImageBackground source={{ uri: details.bg }} style={styles.container}>
+      <View style={styles.darkOverlay} />
+      
       <ScrollView contentContainerStyle={styles.scrollContent}>
         
         <View style={styles.titleCard}>
           <Text style={[styles.mainTitle, { color: planetBase?.color || '#fff' }]}>{planetBase?.name?.toUpperCase()}</Text>
           <Text style={styles.mainSubtitle}>{planetBase?.info}</Text>
         </View>
+
+        {/* 3D Viewer */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>INTERACTIVE 3D VIEWER</Text>
+          <WebIframe src={`https://eyes.nasa.gov/apps/solar-system/#/${planetId === 'sun' ? 'sun' : planetId}?embed=true`} />
+        </View>
+
+        {/* Image Gallery */}
+        {details.gallery.length > 0 && (
+          <View style={[styles.card, { paddingHorizontal: 0 }]}>
+            <Text style={[styles.cardTitle, { paddingHorizontal: 20 }]}>IMAGE GALLERY</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ paddingLeft: 20 }}>
+              {details.gallery.map((imgUrl: string, idx: number) => (
+                <Image key={idx} source={{ uri: imgUrl }} style={styles.galleryImage} />
+              ))}
+              <View style={{ width: 40 }} />
+            </ScrollView>
+          </View>
+        )}
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>ATMOSPHERIC COMPOSITION</Text>
@@ -111,16 +123,25 @@ export default function PlanetDetailScreen({ routeParams }: any) {
           <View style={styles.dataRow}><Text style={styles.dataLabel}>Day Length:</Text><Text style={styles.dataValue}>{details.data.day}</Text></View>
         </View>
 
-        <View style={[styles.card, { marginTop: 20 }]}>
-          <Text style={styles.cardTitle}>NOTABLE MISSIONS</Text>
-          {details.missions.map((m: any, i: number) => (
-            <View key={i} style={[styles.timelineItem, { borderColor: planetBase?.color || '#4FC3F7' }]}>
-              <Text style={styles.timelineYear}>{m.year}</Text>
-              <Text style={styles.timelineName}>{m.name}</Text>
-              <Text style={styles.timelineDesc}>{m.desc}</Text>
-            </View>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>MOONS</Text>
+          {details.moonsList.map((moon: string, i: number) => (
+            <Text key={i} style={styles.moonText}>• {moon}</Text>
           ))}
         </View>
+
+        {details.missions.length > 0 && (
+          <View style={[styles.card, { marginTop: 20 }]}>
+            <Text style={styles.cardTitle}>NOTABLE MISSIONS</Text>
+            {details.missions.map((m: any, i: number) => (
+              <View key={i} style={[styles.timelineItem, { borderColor: planetBase?.color || '#4FC3F7' }]}>
+                <Text style={styles.timelineYear}>{m.year}</Text>
+                <Text style={styles.timelineName}>{m.name}</Text>
+                <Text style={styles.timelineDesc}>{m.desc}</Text>
+              </View>
+            ))}
+          </View>
+        )}
 
       </ScrollView>
     </ImageBackground>
@@ -129,12 +150,14 @@ export default function PlanetDetailScreen({ routeParams }: any) {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  darkOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(5, 5, 10, 0.7)' },
   scrollContent: { padding: 20, paddingBottom: 40 },
   titleCard: { backgroundColor: 'rgba(10,10,20,0.8)', padding: 20, borderRadius: 20, marginBottom: 20, borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' },
   mainTitle: { fontSize: 32, fontWeight: 'bold', marginBottom: 10, letterSpacing: 2 },
   mainSubtitle: { color: '#ddd', fontSize: 16, lineHeight: 24 },
-  card: { backgroundColor: 'rgba(20,20,30,0.6)', borderRadius: 20, padding: 20, marginBottom: 20, borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' },
+  card: { backgroundColor: 'rgba(20,20,30,0.8)', borderRadius: 20, padding: 20, marginBottom: 20, borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' },
   cardTitle: { color: '#fff', fontSize: 14, fontWeight: 'bold', marginBottom: 15, letterSpacing: 1 },
+  galleryImage: { width: 280, height: 180, borderRadius: 15, marginRight: 15, backgroundColor: '#000' },
   row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 },
   statGroup: { flex: 1 },
   statValue: { color: '#4FC3F7', fontSize: 24, fontWeight: 'bold' },
@@ -143,6 +166,7 @@ const styles = StyleSheet.create({
   dataRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
   dataLabel: { color: '#A0A0B0', fontSize: 14 },
   dataValue: { color: '#fff', fontSize: 14, fontWeight: 'bold' },
+  moonText: { color: '#ddd', fontSize: 14, marginBottom: 5, lineHeight: 20 },
   timelineItem: { borderLeftWidth: 2, borderColor: '#4FC3F7', paddingLeft: 15, paddingBottom: 20, marginLeft: 5 },
   timelineYear: { color: '#A0A0B0', fontSize: 12 },
   timelineName: { color: '#fff', fontSize: 16, fontWeight: 'bold', marginVertical: 2 },
