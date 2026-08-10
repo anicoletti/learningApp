@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, Platform, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, Platform, Image, TouchableOpacity, Modal } from 'react-native';
 import { planets } from '../data/planets';
 
 const SPACE_BG = 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f41?q=80&w=3000&auto=format&fit=crop';
@@ -27,9 +27,9 @@ const PLANET_DETAILS: Record<string, any> = {
       { year: '2018-Present', name: 'BepiColombo', desc: 'En route, joint ESA/JAXA mission.' }
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=400&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1614728263952-84ea256f9679?q=80&w=400&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1532687353974-9842426980ee?q=80&w=400&auto=format&fit=crop'
+      { url: 'https://images-assets.nasa.gov/image/PIA13477/PIA13477~medium.jpg', desc: 'Long Scarps on Mercury Tell of the Planet\'s Unique History' },
+      { url: 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e001918/GSFC_20171208_Archive_e001918~small.jpg', desc: 'From Orbit, Looking toward Mercury\'s Horizon' },
+      { url: 'https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e001625/GSFC_20171208_Archive_e001625~small.jpg', desc: 'Happy Little Crater on Mercury' }
     ]
   },
   venus: {
@@ -54,8 +54,8 @@ const PLANET_DETAILS: Record<string, any> = {
       { year: '2015-Present', name: 'Akatsuki', desc: 'Climate orbiter studying the atmosphere.' }
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1614726365723-4993b5443216?q=80&w=400&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=400&auto=format&fit=crop'
+      { url: 'https://images-assets.nasa.gov/image/PIA00110/PIA00110~medium.jpg', desc: 'Four Views of Venus High Pass Filter' },
+      { url: 'https://images-assets.nasa.gov/image/iss006e48523/iss006e48523~medium.jpg', desc: 'View of crescent moon and the planet Venus' }
     ]
   },
   jupiter: {
@@ -137,21 +137,37 @@ const RadialProgress = ({ percentage, color, label }: { percentage: number, colo
   );
 };
 
-const WebIframe = ({ src }: { src: string }) => {
-  if (Platform.OS === 'web') {
-    // @ts-ignore
-    return <iframe src={src} style={{ width: '100%', height: '100%', border: 'none', borderRadius: 15 }} title="3D Viewer" />;
-  }
-  return <Text style={{color: '#fff'}}>3D Viewer only available on Web.</Text>;
-};
-
 export default function PlanetDetailScreen({ routeParams }: any) {
   const planetId = routeParams?.planetId || 'jupiter';
   const planetBase = planets.find(p => p.id === planetId);
   const details = PLANET_DETAILS[planetId] || PLANET_DETAILS['default'];
 
   const [activeTab, setActiveTab] = useState('Details');
-  const tabs = ['Details', 'Atmosphere', 'History', 'Images', '3D Render'];
+  const tabs = ['Details', 'Atmosphere', 'History', 'Images'];
+
+  const [lightboxVisible, setLightboxVisible] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const openLightbox = (idx: number) => {
+    setLightboxIndex(idx);
+    setLightboxVisible(true);
+  };
+
+  const closeLightbox = () => {
+    setLightboxVisible(false);
+  };
+
+  const nextImage = () => {
+    if (lightboxIndex < details.gallery.length - 1) {
+      setLightboxIndex(lightboxIndex + 1);
+    }
+  };
+
+  const prevImage = () => {
+    if (lightboxIndex > 0) {
+      setLightboxIndex(lightboxIndex - 1);
+    }
+  };
 
   return (
     <ImageBackground source={{ uri: SPACE_BG }} style={styles.container}>
@@ -227,22 +243,16 @@ export default function PlanetDetailScreen({ routeParams }: any) {
 
           {activeTab === 'Images' && (
             <ScrollView>
-              <Text style={styles.sectionHeading}>IMAGE GALLERY</Text>
+              <Text style={styles.sectionHeading}>NASA IMAGE GALLERY</Text>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
-                {details.gallery.length > 0 ? details.gallery.map((imgUrl: string, idx: number) => (
-                  <Image key={idx} source={{ uri: imgUrl }} style={styles.galleryImage} />
+                {details.gallery.length > 0 ? details.gallery.map((img: any, idx: number) => (
+                  <TouchableOpacity key={idx} onPress={() => openLightbox(idx)} style={styles.galleryItem}>
+                    <Image source={{ uri: img.url }} style={styles.galleryImage} />
+                    <Text style={styles.galleryCaption} numberOfLines={2}>{img.desc}</Text>
+                  </TouchableOpacity>
                 )) : <Text style={{ color: '#aaa' }}>No images available.</Text>}
               </View>
             </ScrollView>
-          )}
-
-          {activeTab === '3D Render' && (
-            <View style={{ flex: 1 }}>
-              <Text style={[styles.sectionHeading, { marginBottom: 10 }]}>INTERACTIVE 3D VIEWER</Text>
-              <View style={{ flex: 1, backgroundColor: '#000', borderRadius: 15 }}>
-                <WebIframe src={`https://eyes.nasa.gov/apps/solar-system/#/${planetId === 'sun' ? 'sun' : planetId}?embed=true`} />
-              </View>
-            </View>
           )}
         </View>
       </View>
@@ -264,6 +274,43 @@ export default function PlanetDetailScreen({ routeParams }: any) {
           })}
         </ScrollView>
       </View>
+
+      {/* Lightbox Modal */}
+      <Modal visible={lightboxVisible} transparent={true} animationType="fade">
+        <View style={styles.lightboxContainer}>
+          <TouchableOpacity style={styles.lightboxClose} onPress={closeLightbox}>
+            <Text style={styles.lightboxCloseText}>✕</Text>
+          </TouchableOpacity>
+          
+          <View style={styles.lightboxContent}>
+            {lightboxIndex > 0 ? (
+              <TouchableOpacity style={styles.lightboxNav} onPress={prevImage}>
+                <Text style={styles.lightboxNavText}>‹</Text>
+              </TouchableOpacity>
+            ) : <View style={styles.lightboxNav} />}
+            
+            <View style={styles.lightboxImageWrapper}>
+              {details.gallery[lightboxIndex] && (
+                <>
+                  <Image 
+                    source={{ uri: details.gallery[lightboxIndex].url }} 
+                    style={styles.lightboxImage} 
+                    resizeMode="contain" 
+                  />
+                  <Text style={styles.lightboxDesc}>{details.gallery[lightboxIndex].desc}</Text>
+                  <Text style={styles.lightboxCredit}>Credit: NASA</Text>
+                </>
+              )}
+            </View>
+
+            {lightboxIndex < details.gallery.length - 1 ? (
+              <TouchableOpacity style={styles.lightboxNav} onPress={nextImage}>
+                <Text style={styles.lightboxNavText}>›</Text>
+              </TouchableOpacity>
+            ) : <View style={styles.lightboxNav} />}
+          </View>
+        </View>
+      </Modal>
     </ImageBackground>
   );
 }
@@ -297,11 +344,24 @@ const styles = StyleSheet.create({
   timelineName: { color: '#fff', fontSize: 20, fontWeight: 'bold', marginVertical: 4 },
   timelineDesc: { color: '#bbb', fontSize: 16, lineHeight: 24 },
   
-  galleryImage: { width: '48%', height: 200, borderRadius: 15, marginBottom: 10, backgroundColor: '#000' },
+  galleryItem: { width: '48%', marginBottom: 20 },
+  galleryImage: { width: '100%', height: 200, borderRadius: 15, backgroundColor: '#000' },
+  galleryCaption: { color: '#fff', fontSize: 12, marginTop: 8, paddingHorizontal: 5 },
 
   tabBarContainer: { zIndex: 10, backgroundColor: 'rgba(10,10,20,0.9)', borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.1)' },
   tabBar: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20, gap: 10, minWidth: '100%' },
   tabButton: { paddingVertical: 12, paddingHorizontal: 20, borderRadius: 30, borderWidth: 1, borderColor: 'rgba(255,255,255,0.3)' },
   tabText: { color: '#fff', fontWeight: 'bold', fontSize: 14 },
-  tabTextActive: { color: '#000' }
+  tabTextActive: { color: '#000' },
+
+  lightboxContainer: { flex: 1, backgroundColor: 'rgba(0,0,0,0.95)', justifyContent: 'center', alignItems: 'center' },
+  lightboxClose: { position: 'absolute', top: 40, right: 30, zIndex: 100, padding: 10 },
+  lightboxCloseText: { color: '#fff', fontSize: 30, fontWeight: 'bold' },
+  lightboxContent: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', paddingHorizontal: 20 },
+  lightboxNav: { padding: 20, width: 80, alignItems: 'center' },
+  lightboxNavText: { color: '#fff', fontSize: 60, fontWeight: '200' },
+  lightboxImageWrapper: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  lightboxImage: { width: '100%', height: '70%', maxHeight: 800 },
+  lightboxDesc: { color: '#fff', fontSize: 18, marginTop: 20, textAlign: 'center', maxWidth: '80%' },
+  lightboxCredit: { color: '#A0A0B0', fontSize: 12, marginTop: 10, textAlign: 'center' }
 });
