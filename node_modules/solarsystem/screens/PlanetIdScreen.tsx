@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   subtitle: { color: '#80D8FF', fontSize: 14, marginTop: 5 },
   puzzleContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   ring: { borderRadius: 200, borderWidth: 2, borderStyle: 'dashed', justifyContent: 'center', alignItems: 'center' },
-  sun: { width: 60, height: 60, borderRadius: 30, backgroundColor: '#FFD700', shadowColor: '#FFD700', shadowOpacity: 1, shadowRadius: 20, elevation: 10 },
+  sun: { width: 60, height: 60, borderRadius: 30, backgroundColor: '#FFD700', boxShadow: '0px 0px 20px #FFD700', elevation: 10 },
   dock: { backgroundColor: 'rgba(10,10,30,0.9)', borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 20, paddingBottom: 40, borderWidth: 1, borderColor: '#404060' },
   dockTitle: { color: '#4FC3F7', fontSize: 12, fontWeight: 'bold', textAlign: 'center', marginBottom: 20, letterSpacing: 2 },
   planetList: { flexDirection: 'row', justifyContent: 'space-around' },
