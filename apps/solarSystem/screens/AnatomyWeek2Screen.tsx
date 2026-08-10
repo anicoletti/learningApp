@@ -142,9 +142,14 @@ export default function AnatomyWeek2Screen({ navigation }: any) {
             <View style={styles.successTray}>
               <Text style={styles.successTitle}>Skeleton Assembled!</Text>
               <Text style={styles.successText}>The Axial Skeleton is made of the Skull, Ribs, Vertebrae, and Sternum!</Text>
-              <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('AnatomyWeek', { week: 3 })}>
-                <Text style={styles.nextButtonText}>Next Week →</Text>
-              </TouchableOpacity>
+              <View style={styles.buttonRow}>
+                <TouchableOpacity style={[styles.nextButton, { backgroundColor: 'rgba(255,255,255,0.2)' }]} onPress={() => navigation.navigate('AnatomyHub')}>
+                  <Text style={[styles.nextButtonText, { color: '#fff' }]}>Back to Hub</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('AnatomyWeek', { week: 3 })}>
+                  <Text style={styles.nextButtonText}>Next Week →</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         </>
@@ -202,6 +207,7 @@ const styles = StyleSheet.create({
   successTray: { backgroundColor: 'rgba(76, 175, 80, 0.9)', padding: 40, borderTopLeftRadius: 30, borderTopRightRadius: 30, alignItems: 'center' },
   successTitle: { color: '#fff', fontSize: 32, fontWeight: 'bold', marginBottom: 10 },
   successText: { color: '#fff', fontSize: 18, textAlign: 'center', marginBottom: 30 },
+  buttonRow: { flexDirection: 'row', gap: 15, justifyContent: 'center' },
   nextButton: { backgroundColor: '#fff', paddingHorizontal: 30, paddingVertical: 15, borderRadius: 25 },
   nextButtonText: { color: '#4CAF50', fontSize: 18, fontWeight: 'bold' }
 });

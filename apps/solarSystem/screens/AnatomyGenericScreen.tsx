@@ -262,9 +262,16 @@ export default function AnatomyGenericScreen({ navigation, routeParams }: any) {
             <View style={styles.successTray}>
               <Text style={styles.successTitle}>Outstanding!</Text>
               <Text style={styles.successText}>You've matched everything correctly!</Text>
-              <TouchableOpacity style={styles.nextButton} onPress={getNextWeekAction}>
-                <Text style={styles.nextButtonText}>{week < 12 ? 'Next Week →' : 'Back to Hub'}</Text>
-              </TouchableOpacity>
+              <View style={styles.buttonRow}>
+                <TouchableOpacity style={[styles.nextButton, { backgroundColor: 'rgba(255,255,255,0.2)' }]} onPress={() => navigation.navigate('AnatomyHub')}>
+                  <Text style={[styles.nextButtonText, { color: '#fff' }]}>Back to Hub</Text>
+                </TouchableOpacity>
+                {week < 12 && (
+                  <TouchableOpacity style={styles.nextButton} onPress={getNextWeekAction}>
+                    <Text style={styles.nextButtonText}>Next Week →</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
           )}
         </>
@@ -317,6 +324,7 @@ const styles = StyleSheet.create({
   successTray: { backgroundColor: 'rgba(76, 175, 80, 0.9)', padding: 40, borderTopLeftRadius: 30, borderTopRightRadius: 30, alignItems: 'center' },
   successTitle: { color: '#fff', fontSize: 32, fontWeight: 'bold', marginBottom: 10 },
   successText: { color: '#fff', fontSize: 18, textAlign: 'center', marginBottom: 30 },
+  buttonRow: { flexDirection: 'row', gap: 15, justifyContent: 'center' },
   nextButton: { backgroundColor: '#fff', paddingHorizontal: 30, paddingVertical: 15, borderRadius: 25 },
   nextButtonText: { color: '#4CAF50', fontSize: 18, fontWeight: 'bold' }
 });
