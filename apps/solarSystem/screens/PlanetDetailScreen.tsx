@@ -176,7 +176,7 @@ export default function PlanetDetailScreen({ routeParams }: any) {
 const styles = StyleSheet.create({
   container: { flex: 1, overflow: 'hidden' },
   darkOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(5, 5, 10, 0.85)', zIndex: 1 },
-  giantPlanetGraphic: { position: 'absolute', top: '-10%', right: '-40%', width: '120%', height: '120%', opacity: 0.9, zIndex: 2 },
+  giantPlanetGraphic: { position: 'absolute', top: '-10%', left: '-10%', width: '120%', height: '120%', opacity: 0.9, zIndex: 2 },
   
   contentContainer: { flex: 1, padding: 30, zIndex: 10, marginTop: 40 },
   headerArea: { marginBottom: 40 },
