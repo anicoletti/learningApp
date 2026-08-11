@@ -13,5 +13,6 @@
     "dev": "turbo run dev",
     "build": "turbo run build"
   },
-  "name": "learning-apps-monorepo"
+  "name": "learning-apps-monorepo",
+  "packageManager": "npm@10.8.2"
 }
