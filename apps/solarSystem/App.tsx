@@ -13,6 +13,8 @@ import AnatomyHubScreen from './screens/AnatomyHubScreen';
 import AnatomyWeek1Screen from './screens/AnatomyWeek1Screen';
 import AnatomyWeek2Screen from './screens/AnatomyWeek2Screen';
 import AnatomyGenericScreen from './screens/AnatomyGenericScreen';
+import SolarSystem3DScreen from './screens/SolarSystem3DScreen';
+import SolarSystem2DScreen from './screens/SolarSystem2DScreen';
 
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
   const style = document.createElement('style');
@@ -76,6 +78,10 @@ export default function App() {
         return <AnatomyWeek2Screen navigation={{ navigate, goBack, replace }} />;
       case 'AnatomyWeek':
         return <AnatomyGenericScreen key={routeParams?.week} navigation={{ navigate, goBack, replace }} routeParams={routeParams} />;
+      case 'SolarSystem3D':
+        return <SolarSystem3DScreen navigation={{ navigate, goBack, replace }} route={{ params: { onBack: goBack } }} />;
+      case 'SolarSystem2D':
+        return <SolarSystem2DScreen navigation={{ navigate, goBack, replace }} route={{ params: { onBack: goBack } }} />;
       case 'Home':
       default:
         return <HomeScreen navigation={{ navigate, goBack, replace }} />;

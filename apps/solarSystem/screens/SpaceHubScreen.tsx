@@ -7,6 +7,8 @@ const SPACE_BG = 'https://images-assets.nasa.gov/image/NHQ202508030001/NHQ202508
 export default function SpaceHubScreen({ navigation }: any) {
   const modules = [
     { id: 'intro', title: 'Introduction to Our Solar System', desc: 'Learn the basics of our celestial neighborhood.' },
+    { id: 'test_3d', title: '3D Test (R3F)', desc: 'Interactive 3D Solar System rendering with React Three Fiber.' },
+    { id: 'test_2d', title: '2D Test (Phaser)', desc: 'Interactive 2D Solar System game engine rendering with Phaser.' },
     { id: 'sun', title: 'The Sun', desc: 'Our Star' },
     { id: 'mercury', title: 'Mercury', desc: 'The Swift Planet' },
     { id: 'venus', title: 'Venus', desc: 'The Morning Star' },
@@ -39,7 +41,12 @@ export default function SpaceHubScreen({ navigation }: any) {
             <TouchableOpacity 
               key={m.id} 
               style={styles.cardWrapper}
-              onPress={() => m.id === 'intro' ? navigation.navigate('Level1') : navigation.navigate('PlanetDetail', { planetId: m.id })}
+              onPress={() => {
+                if (m.id === 'intro') navigation.navigate('Level1');
+                else if (m.id === 'test_3d') navigation.navigate('SolarSystem3D');
+                else if (m.id === 'test_2d') navigation.navigate('SolarSystem2D');
+                else navigation.navigate('PlanetDetail', { planetId: m.id });
+              }}
             >
               <View style={styles.card}>
                 <Image 
