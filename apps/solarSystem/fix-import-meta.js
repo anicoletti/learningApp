@@ -25,9 +25,22 @@ function findAndReplaceInDir(dir) {
   }
 }
 
+function findPackagesAndReplace(dir) {
+  if (!fs.existsSync(dir)) return;
+  const items = fs.readdirSync(dir);
+  for (const item of items) {
+    const fullPath = path.join(dir, item);
+    if (fs.statSync(fullPath).isDirectory()) {
+      if (item === 'zustand' || item === 'three') {
+        findAndReplaceInDir(fullPath);
+      } else if (item === 'node_modules' || !item.startsWith('.')) {
+        findPackagesAndReplace(fullPath);
+      }
+    }
+  }
+}
+
 console.log('Running postinstall fix for import.meta...');
-findAndReplaceInDir(path.resolve(__dirname, 'node_modules/zustand'));
-findAndReplaceInDir(path.resolve(__dirname, 'node_modules/three'));
-// Also check the root node_modules if hoisted
-findAndReplaceInDir(path.resolve(__dirname, '../../node_modules/zustand'));
-findAndReplaceInDir(path.resolve(__dirname, '../../node_modules/three'));
+findPackagesAndReplace(path.resolve(__dirname, 'node_modules'));
+findPackagesAndReplace(path.resolve(__dirname, '../../node_modules'));
+
