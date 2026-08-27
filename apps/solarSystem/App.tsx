@@ -13,8 +13,9 @@ import AnatomyHubScreen from './screens/AnatomyHubScreen';
 import AnatomyWeek1Screen from './screens/AnatomyWeek1Screen';
 import AnatomyWeek2Screen from './screens/AnatomyWeek2Screen';
 import AnatomyGenericScreen from './screens/AnatomyGenericScreen';
-import SolarSystem3DScreen from './screens/SolarSystem3DScreen';
-import SolarSystem2DScreen from './screens/SolarSystem2DScreen';
+
+const SolarSystem3DScreen = React.lazy(() => import('./screens/SolarSystem3DScreen'));
+const SolarSystem2DScreen = React.lazy(() => import('./screens/SolarSystem2DScreen'));
 
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
   const style = document.createElement('style');
@@ -96,7 +97,9 @@ export default function App() {
           <Text style={styles.backText}>← Back</Text>
         </TouchableOpacity>
       )}
-      {renderScreen()}
+      <React.Suspense fallback={<View style={{flex:1, justifyContent:'center', alignItems:'center'}}><Text style={{color: '#fff'}}>Loading...</Text></View>}>
+        {renderScreen()}
+      </React.Suspense>
     </View>
   );
 }
