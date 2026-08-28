@@ -208,8 +208,18 @@ export default function AnatomyGenericScreen({ navigation, routeParams }: any) {
           </ScrollView>
           <View style={styles.playButtonWrapper}>
             <TouchableOpacity style={styles.playButton} onPress={() => setIsPlaying(true)}>
-              <Text style={styles.playButtonText}>Play Game</Text>
+              <Text style={styles.playButtonText}>Play Game (OLD)</Text>
             </TouchableOpacity>
+            {week === 3 && (
+              <TouchableOpacity style={[styles.playButton, { marginTop: 12, backgroundColor: '#FF7043' }]} onPress={() => alert('Coming Soon: System Operator (2D)')}>
+                <Text style={styles.playButtonText}>System Operator (2D)</Text>
+              </TouchableOpacity>
+            )}
+            {week === 4 && (
+              <TouchableOpacity style={[styles.playButton, { marginTop: 12, backgroundColor: '#FF7043' }]} onPress={() => alert('Coming Soon: Action Potential Pipeline (2D)')}>
+                <Text style={styles.playButtonText}>Action Potential (2D)</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       ) : (

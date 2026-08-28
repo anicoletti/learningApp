@@ -79,7 +79,10 @@ export default function AnatomyWeek2Screen({ navigation }: any) {
           </ScrollView>
           <View style={styles.playButtonWrapper}>
             <TouchableOpacity style={styles.playButton} onPress={() => setIsPlaying(true)}>
-              <Text style={styles.playButtonText}>Play Game</Text>
+              <Text style={styles.playButtonText}>Play Game (OLD)</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.playButton, { marginTop: 12, backgroundColor: '#FF7043' }]} onPress={() => alert('Coming Soon: Skeleton Assembly (2D)')}>
+              <Text style={styles.playButtonText}>Skeleton Assembly (2D)</Text>
             </TouchableOpacity>
           </View>
         </View>
