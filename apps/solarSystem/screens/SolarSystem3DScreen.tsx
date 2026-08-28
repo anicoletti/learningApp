@@ -1,19 +1,21 @@
 import React, { useRef, useState, Suspense } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, SafeAreaView, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, SafeAreaView } from 'react-native';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stars, useTexture } from '@react-three/drei';
 
+const resolveUri = (asset) => (typeof asset === 'string' ? asset : asset.uri || asset.default || asset);
+
 const TEXTURES = {
-  Sun: Image.resolveAssetSource(require('../assets/planets/sun_detailed.png')).uri,
-  Mercury: Image.resolveAssetSource(require('../assets/planets/mercury.png')).uri,
-  Venus: Image.resolveAssetSource(require('../assets/planets/venus.png')).uri,
-  Earth: Image.resolveAssetSource(require('../assets/planets/earth.png')).uri,
-  Mars: Image.resolveAssetSource(require('../assets/planets/mars.png')).uri,
-  Jupiter: Image.resolveAssetSource(require('../assets/planets/jupiter.png')).uri,
-  Saturn: Image.resolveAssetSource(require('../assets/planets/saturn.png')).uri,
-  Uranus: Image.resolveAssetSource(require('../assets/planets/uranus.png')).uri,
-  Neptune: Image.resolveAssetSource(require('../assets/planets/neptune.png')).uri,
-  Pluto: Image.resolveAssetSource(require('../assets/planets/pluto.png')).uri,
+  Sun: resolveUri(require('../assets/planets/sun_detailed.png')),
+  Mercury: resolveUri(require('../assets/planets/mercury.png')),
+  Venus: resolveUri(require('../assets/planets/venus.png')),
+  Earth: resolveUri(require('../assets/planets/earth.png')),
+  Mars: resolveUri(require('../assets/planets/mars.png')),
+  Jupiter: resolveUri(require('../assets/planets/jupiter.png')),
+  Saturn: resolveUri(require('../assets/planets/saturn.png')),
+  Uranus: resolveUri(require('../assets/planets/uranus.png')),
+  Neptune: resolveUri(require('../assets/planets/neptune.png')),
+  Pluto: resolveUri(require('../assets/planets/pluto.png')),
 };
 
 const Planet = ({ distance, speed, size, name, isSun }) => {

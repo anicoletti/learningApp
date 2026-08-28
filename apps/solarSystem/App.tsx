@@ -18,7 +18,7 @@ import AnatomyWeekScreen from './screens/AnatomyWeekScreen';
 const SolarSystem3DScreen = React.lazy(() => import('./screens/SolarSystem3DScreen'));
 const SolarSystem2DScreen = React.lazy(() => import('./screens/SolarSystem2DScreen'));
 
-console.log("🚀 APP_VERSION: TEXTURES_V1_CACHE_CLEARED");
+console.log("🚀 APP_VERSION: TEXTURES_V2_FOOLPROOF_URL");
 
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
   const style = document.createElement('style');
