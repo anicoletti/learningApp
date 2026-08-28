@@ -28,7 +28,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "build": "node fix-import-meta.js && npx expo export -p web"
+    "build": "node fix-import-meta.js && npx expo export -p web -c"
   },
   "private": true
 }
