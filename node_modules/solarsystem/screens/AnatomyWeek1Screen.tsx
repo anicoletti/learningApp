@@ -78,7 +78,7 @@ export default function AnatomyWeek1Screen({ navigation }: any) {
             <TouchableOpacity style={styles.playButton} onPress={() => setIsPlaying(true)}>
               <Text style={styles.playButtonText}>Play Game (OLD)</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.playButton, { marginTop: 12, backgroundColor: '#FF7043' }]} onPress={() => alert('Coming Soon: Tissue Defense (2D)')}>
+            <TouchableOpacity style={[styles.playButton, { marginTop: 12, backgroundColor: '#FF7043' }]} onPress={() => navigation.navigate('AnatomyTissueDefense')}>
               <Text style={styles.playButtonText}>Tissue Defense (2D)</Text>
             </TouchableOpacity>
           </View>

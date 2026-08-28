@@ -15,6 +15,11 @@ import AnatomyWeek2Screen from './screens/AnatomyWeek2Screen';
 import AnatomyGenericScreen from './screens/AnatomyGenericScreen';
 import AnatomyWeekScreen from './screens/AnatomyWeekScreen';
 
+const AnatomyTissueDefenseScreen = React.lazy(() => import('./screens/AnatomyTissueDefenseScreen'));
+const AnatomySkeletonAssemblyScreen = React.lazy(() => import('./screens/AnatomySkeletonAssemblyScreen'));
+const AnatomySystemOperatorScreen = React.lazy(() => import('./screens/AnatomySystemOperatorScreen'));
+const AnatomyActionPotentialScreen = React.lazy(() => import('./screens/AnatomyActionPotentialScreen'));
+
 const SolarSystem3DScreen = React.lazy(() => import('./screens/SolarSystem3DScreen'));
 const SolarSystem2DScreen = React.lazy(() => import('./screens/SolarSystem2DScreen'));
 
@@ -82,6 +87,14 @@ export default function App() {
         return <AnatomyWeek2Screen navigation={{ navigate, goBack, replace }} />;
       case 'AnatomyWeek':
         return <AnatomyGenericScreen key={routeParams?.week} navigation={{ navigate, goBack, replace }} routeParams={routeParams} />;
+      case 'AnatomyTissueDefense':
+        return <AnatomyTissueDefenseScreen navigation={{ navigate, goBack, replace }} />;
+      case 'AnatomySkeletonAssembly':
+        return <AnatomySkeletonAssemblyScreen navigation={{ navigate, goBack, replace }} />;
+      case 'AnatomySystemOperator':
+        return <AnatomySystemOperatorScreen navigation={{ navigate, goBack, replace }} />;
+      case 'AnatomyActionPotential':
+        return <AnatomyActionPotentialScreen navigation={{ navigate, goBack, replace }} />;
       case 'SolarSystem3D':
         return <SolarSystem3DScreen navigation={{ navigate, goBack, replace }} route={{ params: { onBack: goBack } }} />;
       case 'SolarSystem2D':
