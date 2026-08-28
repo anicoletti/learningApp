@@ -5,7 +5,7 @@ function replaceInFile(filePath) {
   if (fs.existsSync(filePath)) {
     let content = fs.readFileSync(filePath, 'utf8');
     if (content.includes('import.meta')) {
-      content = content.replace(/import\.meta/g, '({env:{MODE:"production"}} /* removed import.meta */)');
+      content = content.replace(/import\.meta/g, '({env:{MODE:"production"}} /* scrubbed */)');
       fs.writeFileSync(filePath, content, 'utf8');
       console.log('Fixed import.meta in', filePath);
     }

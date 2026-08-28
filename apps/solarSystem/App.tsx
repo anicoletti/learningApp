@@ -13,9 +13,12 @@ import AnatomyHubScreen from './screens/AnatomyHubScreen';
 import AnatomyWeek1Screen from './screens/AnatomyWeek1Screen';
 import AnatomyWeek2Screen from './screens/AnatomyWeek2Screen';
 import AnatomyGenericScreen from './screens/AnatomyGenericScreen';
+import AnatomyWeekScreen from './screens/AnatomyWeekScreen';
 
 const SolarSystem3DScreen = React.lazy(() => import('./screens/SolarSystem3DScreen'));
 const SolarSystem2DScreen = React.lazy(() => import('./screens/SolarSystem2DScreen'));
+
+console.log("🚀 APP_VERSION: TEXTURES_V1_CACHE_CLEARED");
 
 if (Platform.OS === 'web' && typeof document !== 'undefined') {
   const style = document.createElement('style');
