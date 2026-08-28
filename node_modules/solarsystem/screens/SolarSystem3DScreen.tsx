@@ -1,27 +1,24 @@
 import React, { useRef, useState, Suspense } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, SafeAreaView } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, SafeAreaView, Image } from 'react-native';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Stars } from '@react-three/drei';
-
-import { TextureLoader } from 'three';
-import { useLoader } from '@react-three/fiber';
+import { OrbitControls, Stars, useTexture } from '@react-three/drei';
 
 const TEXTURES = {
-  Sun: require('../assets/planets/sun_detailed.png'),
-  Mercury: require('../assets/planets/mercury.png'),
-  Venus: require('../assets/planets/venus.png'),
-  Earth: require('../assets/planets/earth.png'),
-  Mars: require('../assets/planets/mars.png'),
-  Jupiter: require('../assets/planets/jupiter.png'),
-  Saturn: require('../assets/planets/saturn.png'),
-  Uranus: require('../assets/planets/uranus.png'),
-  Neptune: require('../assets/planets/neptune.png'),
-  Pluto: require('../assets/planets/pluto.png'),
+  Sun: Image.resolveAssetSource(require('../assets/planets/sun_detailed.png')).uri,
+  Mercury: Image.resolveAssetSource(require('../assets/planets/mercury.png')).uri,
+  Venus: Image.resolveAssetSource(require('../assets/planets/venus.png')).uri,
+  Earth: Image.resolveAssetSource(require('../assets/planets/earth.png')).uri,
+  Mars: Image.resolveAssetSource(require('../assets/planets/mars.png')).uri,
+  Jupiter: Image.resolveAssetSource(require('../assets/planets/jupiter.png')).uri,
+  Saturn: Image.resolveAssetSource(require('../assets/planets/saturn.png')).uri,
+  Uranus: Image.resolveAssetSource(require('../assets/planets/uranus.png')).uri,
+  Neptune: Image.resolveAssetSource(require('../assets/planets/neptune.png')).uri,
+  Pluto: Image.resolveAssetSource(require('../assets/planets/pluto.png')).uri,
 };
 
 const Planet = ({ distance, speed, size, name, isSun }) => {
   const meshRef = useRef(null);
-  const texture = useLoader(TextureLoader, TEXTURES[name]);
+  const texture = useTexture(TEXTURES[name]);
   
   useFrame((state, delta) => {
     if (meshRef.current && distance > 0) {
